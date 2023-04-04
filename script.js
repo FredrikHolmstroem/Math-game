@@ -33,12 +33,12 @@ function generateRandomProblem() {
 }
 
 function generateChainRuleProblem() {
-        const functions = [
+    const functions = [
         { fn: 'x^2', derivative: '2x' },
-        { fn: '\\sin(x)', derivative: '\\cos(x)' },
-        { fn: '\\cos(x)', derivative: '-\\sin(x)' },
+        { fn: 'sin(x)', derivative: 'cos(x)' },
+        { fn: 'cos(x)', derivative: '-sin(x)' },
         { fn: 'e^x', derivative: 'e^x' },
-        { fn: '\\ln(x)', derivative: '\\frac{1}{x}' },
+        { fn: 'ln(x)', derivative: '1/x' },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
     const b = functions[Math.floor(Math.random() * functions.length)];
@@ -66,10 +66,10 @@ function generateOptions(answer) {
     } else {
         const functions = [
             { fn: 'x^2', derivative: '2x' },
-            { fn: '\\sin(x)', derivative: '\\cos(x)' },
-            { fn: '\\cos(x)', derivative: '-\\sin(x)' },
+            { fn: 'sin(x)', derivative: 'cos(x)' },
+            { fn: 'cos(x)', derivative: '-sin(x)' },
             { fn: 'e^x', derivative: 'e^x' },
-            { fn: '\\ln(x)', derivative: '\\frac{1}{x}' },
+            { fn: 'ln(x)', derivative: '1/x' },
         ];
         while (options.size < 4) {
             const a = functions[Math.floor(Math.random() * functions.length)];
@@ -87,7 +87,6 @@ function displayProblem(problem) {
     } else {
         problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
     }
-    katex.render(problemElement.textContent, problemElement, { throwOnError: false });
 }
 
 function displayOptions(options) {
@@ -95,7 +94,6 @@ function displayOptions(options) {
         const optionElem = document.getElementById(`option${index + 1}`);
         optionElem.textContent = option;
         optionElem.onclick = () => checkAnswer(option);
-        katex.render(optionElem.textContent, optionElem, { throwOnError: false });
     });
 }
 
@@ -103,10 +101,9 @@ function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.textContent += `\nStep-by-step solution (simplified):\n\\(\\frac{dy}{dx} = ${currentAnswer}\\)`;
+            correctAnswerElem.textContent += `\nStep-by-step solution (simplified):\n(dy/dx) = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
-        katex.render(correctAnswerElem.textContent, correctAnswerElem, { throwOnError: false });
     }
 }
 
