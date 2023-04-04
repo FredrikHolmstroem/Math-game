@@ -42,8 +42,8 @@ function generateChainRuleProblem() {
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
     const b = functions[Math.floor(Math.random() * functions.length)];
-    const operator = "'";
-    return { a, b, operator };
+
+    return { a, b, operator: "'" };
 }
 
 function calculateAnswer(problem) {
@@ -53,7 +53,7 @@ function calculateAnswer(problem) {
         case '-': return a - b;
         case '*': return a * b;
         case '/': return a / b;
-        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
     }
 }
 
@@ -83,7 +83,7 @@ function generateOptions(answer) {
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
     if (problem.operator === "'") {
-        problemElement.textContent = `y = ${problem.a.fn.replace(/x/g, `(${problem.b.fn})`)}`;
+        problemElement.textContent = `y = ${problem.a.fn}(${problem.b.fn})`;
     } else {
         problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
     }
@@ -91,9 +91,9 @@ function displayProblem(problem) {
 
 function displayOptions(options) {
     options.forEach((option, index) => {
-        const optionElem = document.getElementById(`option${index + 1}`);
-        optionElem.textContent = option;
-        optionElem.onclick = () => checkAnswer(option);
+        const optionElement = document.getElementById(`option${index + 1}`);
+        optionElement.textContent = option;
+        optionElement.onclick = () => checkAnswer(option);
     });
 }
 
@@ -101,7 +101,7 @@ function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.textContent += `\nStep-by-step solution (simplified):\n(dy/dx) = ${currentAnswer}`;
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
     }
@@ -110,4 +110,3 @@ function checkAnswer(selectedOption) {
 let gameMode;
 let currentProblem;
 let currentAnswer;
-
