@@ -98,7 +98,11 @@ function displayOptions(options) {
 }
 
 function checkAnswer(selectedOption) {
-    if (selectedOption === currentAnswer) {
+    const isCorrect = gameMode === "random"
+        ? selectedOption === currentAnswer
+        : selectedOption === String(currentAnswer);
+
+    if (isCorrect) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
             const explanation = generateExplanation(currentProblem);
@@ -107,7 +111,6 @@ function checkAnswer(selectedOption) {
         solutionDiv.style.display = "block";
     }
 }
-
 function generateExplanation(problem) {
     const { a, b } = problem;
     const steps = [
