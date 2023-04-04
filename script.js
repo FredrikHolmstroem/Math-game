@@ -11,16 +11,21 @@ function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
-    generateNewProblem();
+    currentProblem = generateNewProblem();
 }
 
-function generateNewProblem() {
-    solutionDiv.style.display = "none";
-    const problem = gameMode === "random" ? generateRandomProblem() : generateChainRuleProblem();
-    currentAnswer = calculateAnswer(problem);
-    const options = generateOptions(currentAnswer);
-    displayProblem(problem);
-    displayOptions(options.sort(() => Math.random() - 0.5));
+function generateChainRuleProblem() {
+    const functions = [
+        { fn: 'x^2', derivative: '2x' },
+        { fn: 'sin(x)', derivative: 'cos(x)' },
+        { fn: 'cos(x)', derivative: '-sin(x)' },
+        { fn: 'e^x', derivative: 'e^x' },
+        { fn: 'ln(x)', derivative: '1/x' },
+    ];
+    const a = functions[Math.floor(Math.random() * functions.length)];
+    const b = functions[Math.floor(Math.random() * functions.length)];
+
+    return { a, b, operator: "'" };
 }
 
 nextBtn.addEventListener("click", generateNewProblem);
@@ -60,7 +65,7 @@ function generateOptions(answer) {
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
     if (problem.operator === "'") {
-        problemElement.textContent = `(${problem.a}x)(${problem.b}x)'`;
+        problemElement.textContent = `y = ${problem.a.fn}(${problem.b.fn})`;
     } else {
         problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
     }
@@ -77,6 +82,9 @@ function displayOptions(options) {
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         correctAnswerElem.textContent = `${currentAnswer}`;
+        if (gameMode === "chainRule") {
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = (${currentProblem.a.derivative})(${currentProblem.b.fn}) + (${currentProblem.a.fn})(${currentProblem.b.derivative})`;
+        }
         solutionDiv.style.display = "block";
     }
 }
