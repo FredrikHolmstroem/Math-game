@@ -35,15 +35,15 @@ function generateRandomProblem() {
 function generateChainRuleProblem() {
     const functions = [
         { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
+        { fn: '\\sin(x)', derivative: '\\cos(x)' },
+        { fn: '\\cos(x)', derivative: '-\\sin(x)' },
         { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
+        { fn: '\\ln(x)', derivative: '\\frac{1}{x}' },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
     const b = functions[Math.floor(Math.random() * functions.length)];
-
-    return { a, b, operator: "'" };
+    const operator = "'";
+    return { a, b, operator };
 }
 
 function calculateAnswer(problem) {
@@ -53,7 +53,7 @@ function calculateAnswer(problem) {
         case '-': return a - b;
         case '*': return a * b;
         case '/': return a / b;
-        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
     }
 }
 
@@ -66,10 +66,10 @@ function generateOptions(answer) {
     } else {
         const functions = [
             { fn: 'x^2', derivative: '2x' },
-            { fn: 'sin(x)', derivative: 'cos(x)' },
-            { fn: 'cos(x)', derivative: '-sin(x)' },
+            { fn: '\\sin(x)', derivative: '\\cos(x)' },
+            { fn: '\\cos(x)', derivative: '-\\sin(x)' },
             { fn: 'e^x', derivative: 'e^x' },
-            { fn: 'ln(x)', derivative: '1/x' },
+            { fn: '\\ln(x)', derivative: '\\frac{1}{x}' },
         ];
         while (options.size < 4) {
             const a = functions[Math.floor(Math.random() * functions.length)];
@@ -83,7 +83,7 @@ function generateOptions(answer) {
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
     if (problem.operator === "'") {
-        problemElement.textContent = `y = ${problem.a.fn.replace(/x/g, `{${problem.b.fn}}`)}`;
+        problemElement.innerHTML = `y = ${problem.a.fn.replace(/x/g, `{${problem.b.fn}}`)}`;
     } else {
         problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
     }
@@ -93,9 +93,14 @@ function displayProblem(problem) {
 
 function displayOptions(options) {
     options.forEach((option, index) => {
-        const optionElement = document.getElementById(`option${index + 1}`);
-        optionElement.textContent = option;
-        optionElement.onclick = () => checkAnswer(option);
+        const optionElem = document.getElementById(`option${index + 1}`);
+        optionElem.textContent = option;
+        optionElem.addEventListener("click", () => checkAnswer(option));
+        if (gameMode === "chainRule") {
+            optionElem.innerHTML = option;
+            MathJax.typesetClear([optionElem]);
+            MathJax.typesetPromise([optionElem]).catch((err) => console.log(err.message));
+        }
     });
 }
 
@@ -103,7 +108,7 @@ function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>\\(\\frac{dy}{dx} = ${currentAnswer}\\)`;
         }
         solutionDiv.style.display = "block";
         MathJax.typesetClear([correctAnswerElem]);
@@ -111,7 +116,7 @@ function checkAnswer(selectedOption) {
     }
 }
 
-
 let gameMode;
 let currentProblem;
 let currentAnswer;
+
