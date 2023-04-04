@@ -59,8 +59,23 @@ function calculateAnswer(problem) {
 
 function generateOptions(answer) {
     const options = new Set([answer]);
-    while (options.size < 4) {
-        options.add(Math.floor(Math.random() * 100));
+    if (gameMode === "random") {
+        while (options.size < 4) {
+            options.add(Math.floor(Math.random() * 100));
+        }
+    } else {
+        const functions = [
+            { fn: 'x^2', derivative: '2x' },
+            { fn: 'sin(x)', derivative: 'cos(x)' },
+            { fn: 'cos(x)', derivative: '-sin(x)' },
+            { fn: 'e^x', derivative: 'e^x' },
+            { fn: 'ln(x)', derivative: '1/x' },
+        ];
+        while (options.size < 4) {
+            const a = functions[Math.floor(Math.random() * functions.length)];
+            const b = functions[Math.floor(Math.random() * functions.length)];
+            options.add(`(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`);
+        }
     }
     return Array.from(options);
 }
