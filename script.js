@@ -90,12 +90,13 @@ function displayProblem(problem) {
 }
 
 function displayOptions(options) {
-    options.forEach((option, index) => {
-        const optionElement = document.getElementById(`option${index + 1}`);
-        optionElement.textContent = option;
-        optionElement.onclick = () => checkAnswer(String(option));
+    const optionElements = document.querySelectorAll('.option-btn');
+    optionElements.forEach((optionElement, index) => {
+        optionElement.textContent = options[index];
+        optionElement.onclick = () => checkAnswer(options[index]);
     });
 }
+
 
 function checkAnswer(selectedOption) {
     const isCorrect = gameMode === "random"
