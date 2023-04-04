@@ -93,7 +93,7 @@ function displayOptions(options) {
     options.forEach((option, index) => {
         const optionElement = document.getElementById(`option${index + 1}`);
         optionElement.textContent = option;
-        optionElement.onclick = () => checkAnswer(option);
+        optionElement.onclick = () => checkAnswer(String(option));
     });
 }
 
