@@ -53,7 +53,7 @@ function calculateAnswer(problem) {
         case '-': return a - b;
         case '*': return a * b;
         case '/': return a / b;
-        case "'": return a * b;
+        case "'": return a.fn + '*' + b.fn; // Return the original function for chain rule problems
     }
 }
 
@@ -92,5 +92,7 @@ function checkAnswer(selectedOption) {
     }
 }
 
+
 let gameMode;
+let currentProblem;
 let currentAnswer;
