@@ -9,16 +9,23 @@
 <body>
     <div class="game-container">
         <h1>Math Game</h1>
-        <h2 id="game-choice">Choose game type:</h2>
-        <button id="random-game" class="game-type-btn">Random Equations</button>
-        <button id="chain-rule-game" class="game-type-btn">Chain Rule Equations</button>
-        <p id="solution"></p>
-        <p id="problem"></p>
-        <div class="options">
-            <button id="option1" class="option-btn"></button>
-            <button id="option2" class="option-btn"></button>
-            <button id="option3" class="option-btn"></button>
-            <button id="option4" class="option-btn"></button>
+        <div id="game-menu">
+            <button id="start-random" class="menu-btn">Random Equations</button>
+            <button id="start-chain-rule" class="menu-btn">Chain Rule Equations</button>
+        </div>
+        <div id="game-board" style="display: none;">
+            <p id="problem"></p>
+            <div class="options">
+                <button id="option1" class="option-btn"></button>
+                <button id="option2" class="option-btn"></button>
+                <button id="option3" class="option-btn"></button>
+                <button id="option4" class="option-btn"></button>
+            </div>
+            <div id="solution" style="display: none;">
+                <h2>Correct Answer:</h2>
+                <p id="correct-answer"></p>
+                <button id="next-btn">Next</button>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
