@@ -14,18 +14,13 @@ function startGame(gameType) {
     currentProblem = generateNewProblem();
 }
 
-function generateChainRuleProblem() {
-    const functions = [
-        { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
-        { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
-    ];
-    const a = functions[Math.floor(Math.random() * functions.length)];
-    const b = functions[Math.floor(Math.random() * functions.length)];
-
-    return { a, b, operator: "'" };
+function generateNewProblem() {
+    solutionDiv.style.display = "none";
+    const problem = gameMode === "random" ? generateRandomProblem() : generateChainRuleProblem();
+    currentAnswer = calculateAnswer(problem);
+    const options = generateOptions(currentAnswer);
+    displayProblem(problem);
+    displayOptions(options.sort(() => Math.random() - 0.5));
 }
 
 nextBtn.addEventListener("click", generateNewProblem);
@@ -38,8 +33,16 @@ function generateRandomProblem() {
 }
 
 function generateChainRuleProblem() {
-    const a = Math.floor(Math.random() * 5) + 1;
-    const b = Math.floor(Math.random() * 5) + 1;
+    const functions = [
+        { fn: 'x^2', derivative: '2x' },
+        { fn: 'sin(x)', derivative: 'cos(x)' },
+        { fn: 'cos(x)', derivative: '-sin(x)' },
+        { fn: 'e^x', derivative: 'e^x' },
+        { fn: 'ln(x)', derivative: '1/x' },
+    ];
+    const a = functions[Math.floor(Math.random() * functions.length)];
+    const b = functions[Math.floor(Math.random() * functions.length)];
+
     return { a, b, operator: "'" };
 }
 
