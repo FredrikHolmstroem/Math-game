@@ -80,15 +80,14 @@ function generateOptions(answer) {
     return Array.from(options);
 }
 
-function displayProblem(problem) {
-    const problemElement = document.getElementById("problem");
-    if (problem.operator === "'") {
-        problemElement.innerHTML = `y = ${problem.a.fn.replace(/x/g, `{${problem.b.fn}}`)}`;
-    } else {
-        problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
-    }
-    MathJax.typesetClear([problemElement]);
-    MathJax.typesetPromise([problemElement]).catch((err) => console.log(err.message));
+function displayOptions(options) {
+    options.forEach((option, index) => {
+        const optionElem = document.getElementById(`option${index + 1}`);
+        optionElem.innerHTML = option;
+        optionElem.onclick = () => checkAnswer(option);
+        MathJax.typesetClear([optionElem]);
+        MathJax.typesetPromise([optionElem]).catch((err) => console.log(err.message));
+    });
 }
 
 function displayOptions(options) {
