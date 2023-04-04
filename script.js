@@ -93,9 +93,11 @@ function displayOptions(options) {
     options.forEach((option, index) => {
         const optionElement = document.getElementById(`option${index + 1}`);
         optionElement.textContent = option;
-        optionElement.onclick = () => checkAnswer(option);
+        optionElement.removeEventListener("click", checkAnswer); // Remove any previous event listeners
+        optionElement.addEventListener("click", () => checkAnswer(option));
     });
 }
+
 
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
