@@ -53,7 +53,7 @@ function calculateAnswer(problem) {
         case '-': return a - b;
         case '*': return a * b;
         case '/': return a / b;
-        case "'": return a.fn + '*' + b.fn; // Return the original function for chain rule problems
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
     }
 }
 
@@ -84,9 +84,9 @@ function displayOptions(options) {
 
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
-        correctAnswerElem.textContent = `${currentAnswer}`;
+        correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = (${currentProblem.a.derivative})(${currentProblem.b.fn}) + (${currentProblem.a.fn})(${currentProblem.b.derivative})`;
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
     }
