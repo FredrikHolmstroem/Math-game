@@ -102,11 +102,11 @@ function checkAnswer(selectedOption) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
             correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}<br>` +
-                `Outer function: ${problem.a.fn}<br>` +
-                `Inner function: ${problem.b.fn}<br>` +
-                `Derivative of outer function (with respect to inner function): ${problem.a.derivative}<br>` +
-                `Derivative of inner function: ${problem.b.derivative}<br>` +
-                `Using chain rule: dy/dx = (${problem.a.derivative})(${problem.b.fn}) + (${problem.a.fn})(${problem.b.derivative})`;
+                `Outer function: ${currentProblem.a.fn}<br>` +
+                `Inner function: ${currentProblem.b.fn}<br>` +
+                `Derivative of outer function (with respect to inner function): ${currentProblem.a.derivative}<br>` +
+                `Derivative of inner function: ${currentProblem.b.derivative}<br>` +
+                `Using chain rule: dy/dx = (${currentProblem.a.derivative})(${currentProblem.b.fn}) + (${currentProblem.a.fn})(${currentProblem.b.derivative})`;
         }
         solutionDiv.style.display = "block";
     }
