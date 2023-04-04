@@ -83,10 +83,12 @@ function generateOptions(answer) {
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
     if (problem.operator === "'") {
-        problemElement.textContent = `y = ${problem.a.fn}(${problem.b.fn})`;
+        problemElement.textContent = `y = ${problem.a.fn.replace(/x/g, `{${problem.b.fn}}`)}`;
     } else {
         problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
     }
+    MathJax.typesetClear([problemElement]);
+    MathJax.typesetPromise([problemElement]).catch((err) => console.log(err.message));
 }
 
 function displayOptions(options) {
@@ -104,6 +106,8 @@ function checkAnswer(selectedOption) {
             correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
+        MathJax.typesetClear([correctAnswerElem]);
+        MathJax.typesetPromise([correctAnswerElem]).catch((err) => console.log(err.message));
     }
 }
 
