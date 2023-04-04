@@ -3,15 +3,24 @@ const gameBoard = document.getElementById("game-board");
 const solutionDiv = document.getElementById("solution");
 const correctAnswerElem = document.getElementById("correct-answer");
 const nextBtn = document.getElementById("next-btn");
+const scoreCounter = document.getElementById("score-counter");
 
 document.getElementById("start-random").addEventListener("click", () => startGame("random"));
 document.getElementById("start-chain-rule").addEventListener("click", () => startGame("chainRule"));
+
+let score = 0;
 
 function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
     currentProblem = generateNewProblem();
+    score = 0;
+    updateScore();
+}
+
+function updateScore() {
+    scoreCounter.textContent = `Score: ${score}`;
 }
 
 function generateNewProblem() {
@@ -98,9 +107,10 @@ function displayOptions(options) {
     });
 }
 
-
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
+        score++;
+        updateScore();
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
             correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}<br>` +
@@ -114,7 +124,7 @@ function checkAnswer(selectedOption) {
     }
 }
 
-
 let gameMode;
 let currentProblem;
 let currentAnswer;
+
