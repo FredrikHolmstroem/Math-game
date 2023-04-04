@@ -33,7 +33,7 @@ function generateRandomProblem() {
 }
 
 function generateChainRuleProblem() {
-    const functions = [
+        const functions = [
         { fn: 'x^2', derivative: '2x' },
         { fn: '\\sin(x)', derivative: '\\cos(x)' },
         { fn: '\\cos(x)', derivative: '-\\sin(x)' },
@@ -80,26 +80,22 @@ function generateOptions(answer) {
     return Array.from(options);
 }
 
-function displayOptions(options) {
-    options.forEach((option, index) => {
-        const optionElem = document.getElementById(`option${index + 1}`);
-        optionElem.innerHTML = option;
-        optionElem.onclick = () => checkAnswer(option);
-        MathJax.typesetClear([optionElem]);
-        MathJax.typesetPromise([optionElem]).catch((err) => console.log(err.message));
-    });
+function displayProblem(problem) {
+    const problemElement = document.getElementById("problem");
+    if (problem.operator === "'") {
+        problemElement.textContent = `y = ${problem.a.fn.replace(/x/g, `(${problem.b.fn})`)}`;
+    } else {
+        problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
+    }
+    katex.render(problemElement.textContent, problemElement, { throwOnError: false });
 }
 
 function displayOptions(options) {
     options.forEach((option, index) => {
         const optionElem = document.getElementById(`option${index + 1}`);
         optionElem.textContent = option;
-        optionElem.addEventListener("click", () => checkAnswer(option));
-        if (gameMode === "chainRule") {
-            optionElem.innerHTML = option;
-            MathJax.typesetClear([optionElem]);
-            MathJax.typesetPromise([optionElem]).catch((err) => console.log(err.message));
-        }
+        optionElem.onclick = () => checkAnswer(option);
+        katex.render(optionElem.textContent, optionElem, { throwOnError: false });
     });
 }
 
@@ -107,11 +103,10 @@ function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>\\(\\frac{dy}{dx} = ${currentAnswer}\\)`;
+            correctAnswerElem.textContent += `\nStep-by-step solution (simplified):\n\\(\\frac{dy}{dx} = ${currentAnswer}\\)`;
         }
         solutionDiv.style.display = "block";
-        MathJax.typesetClear([correctAnswerElem]);
-        MathJax.typesetPromise([correctAnswerElem]).catch((err) => console.log(err.message));
+        katex.render(correctAnswerElem.textContent, correctAnswerElem, { throwOnError: false });
     }
 }
 
