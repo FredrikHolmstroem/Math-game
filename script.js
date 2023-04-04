@@ -101,28 +101,11 @@ function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            const { a, b } = currentProblem;
-            const steps = [
-                `Step 1: Identify the outer function (u) and the inner function (v).`,
-                `Outer function (u): ${a.fn}`,
-                `Inner function (v): ${b.fn}`,
-                `Step 2: Differentiate the outer function with respect to v.`,
-                `du/dv = ${a.derivative}`,
-                `Step 3: Differentiate the inner function with respect to x.`,
-                `dv/dx = ${b.derivative}`,
-                `Step 4: Apply the Chain Rule: dy/dx = du/dv * dv/dx.`,
-                `dy/dx = (${a.derivative}) * (${b.derivative})`,
-                `Step 5: Substitute v back into the expression.`,
-                `dy/dx = ${currentAnswer}`,
-            ];
-            correctAnswerElem.innerHTML += "<br>" + steps.join("<br>");
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
     }
 }
-
-
-
 
 let gameMode;
 let currentProblem;
