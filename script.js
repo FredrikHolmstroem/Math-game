@@ -3,24 +3,15 @@ const gameBoard = document.getElementById("game-board");
 const solutionDiv = document.getElementById("solution");
 const correctAnswerElem = document.getElementById("correct-answer");
 const nextBtn = document.getElementById("next-btn");
-const scoreCounter = document.getElementById("score-counter");
 
 document.getElementById("start-random").addEventListener("click", () => startGame("random"));
 document.getElementById("start-chain-rule").addEventListener("click", () => startGame("chainRule"));
-
-let score = 0;
 
 function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
     currentProblem = generateNewProblem();
-    score = 0;
-    updateScore();
-}
-
-function updateScore() {
-    scoreCounter.textContent = `Score: ${score}`;
 }
 
 function generateNewProblem() {
@@ -102,23 +93,15 @@ function displayOptions(options) {
     options.forEach((option, index) => {
         const optionElement = document.getElementById(`option${index + 1}`);
         optionElement.textContent = option;
-        optionElement.removeEventListener("click", checkAnswer); // Remove any previous event listeners
-        optionElement.addEventListener("click", () => checkAnswer(option));
+        optionElement.onclick = () => checkAnswer(option);
     });
 }
 
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
-        score++;
-        updateScore();
         correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}<br>` +
-                `Outer function: ${currentProblem.a.fn}<br>` +
-                `Inner function: ${currentProblem.b.fn}<br>` +
-                `Derivative of outer function (with respect to inner function): ${currentProblem.a.derivative}<br>` +
-                `Derivative of inner function: ${currentProblem.b.derivative}<br>` +
-                `Using chain rule: dy/dx = (${currentProblem.a.derivative})(${currentProblem.b.fn}) + (${currentProblem.a.fn})(${currentProblem.b.derivative})`;
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
     }
@@ -127,4 +110,3 @@ function checkAnswer(selectedOption) {
 let gameMode;
 let currentProblem;
 let currentAnswer;
-
