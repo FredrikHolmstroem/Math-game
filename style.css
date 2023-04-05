@@ -19,7 +19,7 @@ body {
     text-align: center;
     font-size: 18px;
     width: 150px; /* Set the width */
-    height: 80px; /* Increase the height */
+    height: 800px; /* Increase the height */
     display: flex; /* Add flex display */
     align-items: center; /* Vertically center the text */
     justify-content: center; /* Horizontally center the text */
