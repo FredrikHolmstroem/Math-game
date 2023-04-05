@@ -10,6 +10,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 800px; /* Increase the width of the game screen */
 }
 
 .option-btn {
@@ -17,10 +18,10 @@ body {
     border: none;
     color: white;
     text-align: center;
-    font-size: 14px; /* Decrease the font size */
-    width: 150px;
-    height: 50px;
-    line-height: 50px; /* Vertically center the text */
+    font-size: 14px;
+    width: 180px; /* Increase the width of the boxes */
+    height: 80px; /* Increase the height of the boxes */
+    line-height: 80px; /* Vertically center the text */
     margin: 10px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -28,7 +29,6 @@ body {
     overflow: hidden; /* Hides any overflowing text */
     text-overflow: ellipsis; /* Shows "..." for overflowing text */
 }
-
 
 
 
