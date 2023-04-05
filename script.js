@@ -34,16 +34,18 @@ function generateRandomProblem() {
 
 function generateChainRuleProblem() {
     const functions = [
-        { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
-        { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
+        { fn: `${Math.random().toFixed(2)}x^2`, derivative: `${(2 * parseFloat(Math.random().toFixed(2))).toFixed(2)}x` },
+        { fn: `${Math.random().toFixed(2)}x^3`, derivative: `${(3 * parseFloat(Math.random().toFixed(2))).toFixed(2)}x^2` },
+        { fn: `${Math.random().toFixed(2)}x^4`, derivative: `${(4 * parseFloat(Math.random().toFixed(2))).toFixed(2)}x^3` },
+        { fn: `sin(${Math.random().toFixed(2)}x)`, derivative: `${Math.random().toFixed(2)}cos(${Math.random().toFixed(2)}x)` },
+        { fn: `cos(${Math.random().toFixed(2)}x)`, derivative: `-${Math.random().toFixed(2)}sin(${Math.random().toFixed(2)}x)` },
+        { fn: `${Math.random().toFixed(2)}e^x`, derivative: `${Math.random().toFixed(2)}e^x` },
+        { fn: `ln(${Math.random().toFixed(2)}x)`, derivative: `1/(${Math.random().toFixed(2)}x)` },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
     let b;
     let operator;
-    const numNestings = Math.floor(Math.random() * 2) + 1; // Choose a random number of nestings between 1 and 10
+    const numNestings = Math.floor(Math.random() * 1) + 1; // Choose a random number of nestings between 1 and 10
     let prevDerivative = a.derivative;
     let prevFn = a.fn;
     for (let i = 0; i < numNestings; i++) {
@@ -56,6 +58,7 @@ function generateChainRuleProblem() {
     operator = "'";
     return { a, b, operator };
 }
+
 
 
 
