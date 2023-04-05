@@ -45,7 +45,7 @@ function generateChainRuleProblem() {
     const a = functions[Math.floor(Math.random() * functions.length)];
     let b;
     let operator;
-    const numNestings = Math.floor(Math.random() * 1) + 1; // Choose a random number of nestings between 1 and 10
+    const numNestings = Math.floor(Math.random() * 1); // Choose a random number of nestings between 1 and 10, add + 1 if you want to do more than 1 after * 1)
     let prevDerivative = a.derivative;
     let prevFn = a.fn;
     for (let i = 0; i < numNestings; i++) {
