@@ -6,60 +6,19 @@ const nextBtn = document.getElementById("next-btn");
 
 document.getElementById("start-random").addEventListener("click", () => startGame("random"));
 document.getElementById("start-chain-rule").addEventListener("click", () => startGame("chainRule"));
-document.getElementById("start-chain-rule-level2").addEventListener("click", () => startGame("chainRuleLevel2"));
+document.getElementById("start-chain-rule-level-2").addEventListener("click", () => startGame("chainRuleLevel2"));
 
 function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
-    generateNewProblem();
-}
-
-function generateChainRuleLevel2Problem() {
-    const functions = [
-        { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
-        { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
-        { fn: 'tan(x)', derivative: 'sec^2(x)' },
-        { fn: 'sec(x)', derivative: 'sec(x)tan(x)' },
-    ];
-
-    const a = functions[Math.floor(Math.random() * functions.length)];
-    const b = functions[Math.floor(Math.random() * functions.length)];
-    const c = functions[Math.floor(Math.random() * functions.length)];
-
-    const k1 = Math.floor(Math.random() * 5) + 1;
-    const k2 = Math.floor(Math.random() * 5) + 1;
-    const k3 = Math.floor(Math.random() * 5) + 1;
-
-    // Generate a nested chain rule problem with constants
-    return { a, b, c, operator: "''", k1, k2, k3 };
-}
-
-function calculateAnswer(problem) {
-    const { a, b, c, operator, k1, k2, k3 } = problem;
-    switch (operator) {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
-        case '/': return a / b;
-        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
-        case "''": return `(${k1 * a.derivative})(${k2 * b.fn})(${k3 * c.fn}) + (${k1 * a.fn})(${k2 * b.derivative})(${k3 * c.fn}) + (${k1 * a.fn})(${k2 * b.fn})(${k3 * c.derivative})`; // Nested chain rule with constants
-    }
+    currentProblem = generateNewProblem();
 }
 
 function generateNewProblem() {
     solutionDiv.style.display = "none";
-    let problem;
-    if (gameMode === "random") {
-        problem = generateRandomProblem();
-    } else if (gameMode === "chainRule") {
-        problem = generateChainRuleProblem();
-    } else if (gameMode === "chainRuleLevel2") {
-        problem = generateChainRuleLevel2Problem();
-    }
+    const problem = gameMode === "random" ? generateRandomProblem() :
+        (gameMode === "chainRule" ? generateChainRuleProblem() : generateChainRuleLevel2Problem());
     currentAnswer = calculateAnswer(problem);
     const options = generateOptions(currentAnswer);
     displayProblem(problem);
@@ -87,6 +46,36 @@ function generateChainRuleProblem() {
     return { a, b, operator: "'" };
 }
 
+function generateChainRuleLevel2Problem() {
+    const functions = [
+        { fn: 'x^2', derivative: '2x' },
+        { fn: 'sin(x)', derivative: 'cos(x)' },
+        { fn: 'cos(x)', derivative: '-sin(x)' },
+        { fn: 'e^x', derivative: 'e^x' },
+        { fn: 'ln(x)', derivative: '1/x' },
+    ];
+    const a = functions[Math.floor(Math.random() * functions.length)];
+    const b = functions[Math.floor(Math.random() * functions.length)];
+    const c = functions[Math.floor(Math.random() * functions.length)];
+    const k1 = Math.floor(Math.random() * 5) + 1;
+    const k2 = Math.floor(Math.random() * 5) + 1;
+    const k3 = Math.floor(Math.random() * 5) + 1;
+
+    return { a, b, c, k1, k2, k3, operator: "''" };
+}
+
+function calculateAnswer(problem) {
+    const { a, b, c, k1, k2, k3, operator } = problem;
+    switch (operator) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
+        case "''": return `(${k1 * a.derivative})(${k2 * b.fn})(${k3 * c.fn}) + (${k1 * a.fn})(${k2 * b.derivative})(${k3 * c.fn}) + (${k1 * a.fn})(${k2 * b.fn})(${k3 * c.derivative})`; // Return the derivative expression for chain rule level 2 problems
+    }
+}
+
 function generateOptions(answer) {
     const options = new Set([answer]);
     if (gameMode === "random") {
@@ -112,7 +101,9 @@ function generateOptions(answer) {
 
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
-    if (problem.operator === "'" || problem.operator === "''") {
+    if (problem.operator === "'") {
+        problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
+    } else if (problem.operator === "''") {
         problemElement.innerHTML = `y = \\(${problem.k1 * problem.a.fn}\\)\\(${problem.k2 * problem.b.fn}\\)\\(${problem.k3 * problem.c.fn}\\)`;
     } else {
         problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
@@ -146,17 +137,18 @@ function checkAnswer(selectedOption) {
 }
 
 let gameMode;
-let currentProblem
+let currentProblem;
 let currentAnswer;
 
 nextBtn.addEventListener("click", generateNewProblem);
 
 // MathJax configuration
 MathJax = {
-tex: {
-inlineMath: [['$', '$'], ['\(', '\)']]
-},
-svg: {
-fontCache: 'global'
-}
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
 };
+
