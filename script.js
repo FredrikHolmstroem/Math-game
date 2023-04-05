@@ -6,7 +6,6 @@ const nextBtn = document.getElementById("next-btn");
 
 document.getElementById("start-random").addEventListener("click", () => startGame("random"));
 document.getElementById("start-chain-rule").addEventListener("click", () => startGame("chainRule"));
-document.getElementById("start-integration").addEventListener("click", () => startGame("integration"));
 
 function startGame(gameType) {
     gameMenu.style.display = "none";
@@ -17,20 +16,7 @@ function startGame(gameType) {
 
 function generateNewProblem() {
     solutionDiv.style.display = "none";
-    let problem;
-    switch (gameMode) {
-        case "random":
-            problem = generateRandomProblem();
-            break;
-        case "chainRule":
-            problem = generateChainRuleProblem();
-            break;
-        case "integration":
-            problem = generateIntegrationProblem();
-            break;
-        default:
-            problem = generateRandomProblem();
-    }
+    const problem = gameMode === "random" ? generateRandomProblem() : generateChainRuleProblem();
     currentAnswer = calculateAnswer(problem);
     const options = generateOptions(currentAnswer);
     displayProblem(problem);
@@ -55,43 +41,34 @@ function generateChainRuleProblem() {
         { fn: 'ln(x)', derivative: '1/x' },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
-    const b = functions[Math.floor(Math.random() * functions.length)];
+    let b;
+    let operator;
+    if (Math.random() < 0.5) {
+        // Generate a chain rule problem with one level of nesting
+        b = functions[Math.floor(Math.random() * functions.length)];
+        operator = "'";
+    } else {
+        // Generate a chain rule problem with two levels of nesting
+        const c = functions[Math.floor(Math.random() * functions.length)];
+        b = { fn: `(${c.fn})^2`, derivative: `2(${c.fn})(${c.derivative})` };
+        operator = "'";
+    }
 
-    return { a, b, operator: "'" };
+    return { a, b, operator };
 }
 
-function generateIntegrationProblem() {
-    const functions = [
-        { fn: 'x^2', integral: 'x^3/3' },
-        { fn: 'sin(x)', integral: '-cos(x)' },
-        { fn: 'cos(x)', integral: 'sin(x)' },
-        { fn: 'e^x', integral: 'e^x' },
-        { fn: 'ln(x)', integral: 'x(ln(x) - 1)' },
-    ];
-    const fn = functions[Math.floor(Math.random() * functions.length)];
-
-    return { fn, operator: 'dx' };
-}
 
 function calculateAnswer(problem) {
-    const { a, b, aFn, bFn, fn, operator } = problem;
+    const { a, b, operator } = problem;
     switch (operator) {
-        case '+':
-            return a + b;
-        case '-':
-            return a - b;
-        case '*':
-            return a * b;
-        case '/':
-            return a / b;
-        case "'":
-            const derivative = `(${aFn.derivative})(${bFn.fn}) + (${aFn.fn})(${bFn.derivative})`;
-            return derivative;
-        case 'dx':
-            const integral = `∫${fn.fn} ${fn.integral} dx`;
-            return integral;
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
     }
 }
+
 function generateOptions(answer) {
     const options = new Set([answer]);
     if (gameMode === "random") {
@@ -107,19 +84,9 @@ function generateOptions(answer) {
             { fn: 'ln(x)', derivative: '1/x' },
         ];
         while (options.size < 4) {
-            let option;
-            if (gameMode === "chainRule") {
-                const a = functions[Math.floor(Math.random() * functions.length)];
-                const b = functions[Math.floor(Math.random() * functions.length)];
-                option = `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
-            } else if (gameMode === "integration") {
-                const functionsCopy = [...functions];
-                functionsCopy.splice(functions.indexOf(currentProblem.fn), 1);
-                const fn1 = currentProblem.fn;
-                const fn2 = functionsCopy[Math.floor(Math.random() * functionsCopy.length)].fn;
-                option = `∫${fn1} dx + ∫${fn2} dx`;
-            }
-            options.add(option);
+            const a = functions[Math.floor(Math.random() * functions.length)];
+            const b = functions[Math.floor(Math.random() * functions.length)];
+            options.add(`(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`);
         }
     }
     return Array.from(options);
@@ -127,10 +94,8 @@ function generateOptions(answer) {
 
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
-    if (problem.operator === "'") {
+        if (problem.operator === "'") {
         problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
-    } else if (problem.operator === "dx") {
-        problemElement.innerHTML = `\\(${problem.fn.fn}\\)\\(${problem.operator}\\)`;
     } else {
         problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
     }
@@ -142,8 +107,6 @@ function displayOptions(options) {
         const optionElement = document.getElementById(`option${index + 1}`);
         if (gameMode === "chainRule") {
             optionElement.innerHTML = `\\(${option}\\)`;
-        } else if (gameMode === "integration") {
-            optionElement.innerHTML = option;
         } else {
             optionElement.textContent = option;
         }
@@ -156,8 +119,6 @@ function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
         if (gameMode === "chainRule") {
             correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer}\\)`;
-        } else if (gameMode === "integration") {
-            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution:<br>\\(${currentProblem.fn.integral}\\)`;
         } else {
             correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         }
@@ -169,4 +130,3 @@ function checkAnswer(selectedOption) {
 let gameMode;
 let currentProblem;
 let currentAnswer;
-
