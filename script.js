@@ -82,31 +82,40 @@ function generateOptions(answer) {
 
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
-    if (problem.operator === "'") {
-        problemElement.textContent = `y = ${problem.a.fn}(${problem.b.fn})`;
+        if (problem.operator === "'") {
+        problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
     } else {
-        problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
+        problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
     }
+    MathJax.typeset(); // Update the LaTeX rendering
 }
 
 function displayOptions(options) {
     options.forEach((option, index) => {
         const optionElement = document.getElementById(`option${index + 1}`);
-        optionElement.textContent = option;
+        if (gameMode === "chainRule") {
+            optionElement.innerHTML = `\\(${option}\\)`;
+        } else {
+            optionElement.textContent = option;
+        }
         optionElement.onclick = () => checkAnswer(option);
     });
+    MathJax.typeset(); // Update the LaTeX rendering
 }
 
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
-        correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
+            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer}\\)`;
+        } else {
+            correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
+        MathJax.typeset(); // Update the LaTeX rendering
     }
 }
 
 let gameMode;
 let currentProblem;
 let currentAnswer;
+
