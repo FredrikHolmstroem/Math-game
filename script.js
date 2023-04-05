@@ -139,6 +139,12 @@ function checkAnswer(selectedOption) {
     }
 }
 
+nextBtn.addEventListener("click", () => {
+    solutionDiv.style.display = "none";
+    generateNewProblem();
+});
+
+
 let gameMode;
 let currentProblem;
 let currentAnswer;
