@@ -17,16 +17,18 @@ body {
     border: none;
     color: white;
     text-align: center;
-    font-size: 18px;
-    width: 400px; /* Set the width */
-    height: 200px; /* Increase the height */
-    display: flex; /* Add flex display */
-    align-items: center; /* Vertically center the text */
-    justify-content: center; /* Horizontally center the text */
+    font-size: 14px; /* Decrease the font size */
+    width: 150px;
+    height: 50px;
+    line-height: 50px; /* Vertically center the text */
     margin: 10px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    white-space: nowrap; /* Prevents line breaks inside the button */
+    overflow: hidden; /* Hides any overflowing text */
+    text-overflow: ellipsis; /* Shows "..." for overflowing text */
 }
+
 
 
 
