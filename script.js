@@ -34,28 +34,37 @@ function generateRandomProblem() {
 
 function generateChainRuleProblem() {
     const functions = [
+        { fn: 'x', derivative: '1' },
         { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
-        { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
+        { fn: 'x^3', derivative: '3x^2' },
+        { fn: 'x^4', derivative: '4x^3' },
+        { fn: 'sin(ax)', derivative: 'a*cos(ax)' },
+        { fn: 'cos(ax)', derivative: '-a*sin(ax)' },
+        { fn: 'e^(ax)', derivative: 'a*e^(ax)' },
+        { fn: 'ln(ax)', derivative: '1/(ax)' },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
     let b;
     let operator;
-    const numNestings = Math.floor(Math.random() * 10) + 1; // Choose a random number of nestings between 1 and 10
+    const numNestings = Math.floor(Math.random() * 5) + 1; // Choose a random number of nestings between 1 and 5
     let prevDerivative = a.derivative;
     let prevFn = a.fn;
     for (let i = 0; i < numNestings; i++) {
-        const nextFn = functions[Math.floor(Math.random() * functions.length)].fn;
-        const nextDerivative = `(${prevDerivative})(${nextFn}) + (${prevFn})(${functions[Math.floor(Math.random() * functions.length)].derivative})`;
-        prevFn = `(${prevFn})(${nextFn})`;
+        const nextFn = functions[Math.floor(Math.random() * functions.length)].fn.replace(/x/g, `(${prevFn})`);
+        let nextDerivative = `(${prevDerivative})(${nextFn})`;
+        if (nextFn.includes('sin') || nextFn.includes('cos') || nextFn.includes('e^') || nextFn.includes('ln')) {
+            const constant = Math.floor(Math.random() * 10) + 1;
+            nextDerivative = nextDerivative.replace(/a/g, constant);
+            nextFn = nextFn.replace(/a/g, constant);
+        }
+        prevFn = nextFn;
         prevDerivative = nextDerivative;
     }
     b = { fn: prevFn, derivative: prevDerivative };
     operator = "'";
     return { a, b, operator };
 }
+
 
 
 
