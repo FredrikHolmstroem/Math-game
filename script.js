@@ -43,14 +43,30 @@ function generateChainRuleProblem() {
     const a = functions[Math.floor(Math.random() * functions.length)];
     let b;
     let operator;
-    if (Math.random() < 0.5) {
+    if (Math.random() < 0.25) {
         // Generate a chain rule problem with one level of nesting
         b = functions[Math.floor(Math.random() * functions.length)];
         operator = "'";
-    } else {
+    } else if (Math.random() < 0.5) {
         // Generate a chain rule problem with two levels of nesting
         const c = functions[Math.floor(Math.random() * functions.length)];
         b = { fn: `(${c.fn})^2`, derivative: `2(${c.fn})(${c.derivative})` };
+        operator = "'";
+    } else if (Math.random() < 0.75) {
+        // Generate a chain rule problem with three levels of nesting
+        const d = functions[Math.floor(Math.random() * functions.length)];
+        const e = functions[Math.floor(Math.random() * functions.length)];
+        b = { fn: `(${d.fn})(${e.fn})`, derivative: `(${d.derivative})(${e.fn}) + (${d.fn})(${e.derivative})` };
+        operator = "'";
+    } else {
+        // Generate a chain rule problem with four levels of nesting
+        const f = functions[Math.floor(Math.random() * functions.length)];
+        const g = functions[Math.floor(Math.random() * functions.length)];
+        const h = functions[Math.floor(Math.random() * functions.length)];
+        b = {
+            fn: `(${f.fn})(${g.fn})(${h.fn})`,
+            derivative: `(${f.derivative})(${g.fn})(${h.fn}) + (${f.fn})(${g.derivative})(${h.fn}) + (${f.fn})(${g.fn})(${h.derivative})`
+        };
         operator = "'";
     }
 
