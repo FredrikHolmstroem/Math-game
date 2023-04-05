@@ -34,13 +34,13 @@ function generateRandomProblem() {
 
 function generateChainRuleProblem() {
     const functions = [
-        { fn: `${Math.random().toFixed(2)}x^2`, derivative: `${(2 * parseFloat(Math.random().toFixed(2))).toFixed(2)}x` },
-        { fn: `${Math.random().toFixed(2)}x^3`, derivative: `${(3 * parseFloat(Math.random().toFixed(2))).toFixed(2)}x^2` },
-        { fn: `${Math.random().toFixed(2)}x^4`, derivative: `${(4 * parseFloat(Math.random().toFixed(2))).toFixed(2)}x^3` },
-        { fn: `sin(${Math.random().toFixed(2)}x)`, derivative: `${Math.random().toFixed(2)}cos(${Math.random().toFixed(2)}x)` },
-        { fn: `cos(${Math.random().toFixed(2)}x)`, derivative: `-${Math.random().toFixed(2)}sin(${Math.random().toFixed(2)}x)` },
-        { fn: `${Math.random().toFixed(2)}e^x`, derivative: `${Math.random().toFixed(2)}e^x` },
-        { fn: `ln(${Math.random().toFixed(2)}x)`, derivative: `1/(${Math.random().toFixed(2)}x)` },
+        { fn: `${Math.floor(Math.random() * 10) + 1}x^2`, derivative: `${2 * (Math.floor(Math.random() * 10) + 1)}x` },
+        { fn: `${Math.floor(Math.random() * 10) + 1}x^3`, derivative: `${3 * (Math.floor(Math.random() * 10) + 1)}x^2` },
+        { fn: `${Math.floor(Math.random() * 10) + 1}x^4`, derivative: `${4 * (Math.floor(Math.random() * 10) + 1)}x^3` },
+        { fn: `sin(${Math.floor(Math.random() * 10) + 1}x)`, derivative: `${Math.floor(Math.random() * 10) + 1}cos(${Math.floor(Math.random() * 10) + 1}x)` },
+        { fn: `cos(${Math.floor(Math.random() * 10) + 1}x)`, derivative: `-${Math.floor(Math.random() * 10) + 1}sin(${Math.floor(Math.random() * 10) + 1}x)` },
+        { fn: `${Math.floor(Math.random() * 10) + 1}e^x`, derivative: `${Math.floor(Math.random() * 10) + 1}e^x` },
+        { fn: `ln(${Math.floor(Math.random() * 10) + 1}x)`, derivative: `1/(${Math.floor(Math.random() * 10) + 1}x)` },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
     let b;
@@ -58,6 +58,7 @@ function generateChainRuleProblem() {
     operator = "'";
     return { a, b, operator };
 }
+
 
 
 
