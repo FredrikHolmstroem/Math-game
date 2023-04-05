@@ -11,7 +11,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 90%; /* Add a max-width to allow the game-container to expand */
-    width: 600px; /* Set a desired width */
+    width: 1200px; /* Set a desired width */
     box-sizing: border-box; /* Add this to include padding in the width calculation */
 }
 
