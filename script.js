@@ -11,14 +11,14 @@ function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
-    generateNewProblem();
+    currentProblem = generateNewProblem();
 }
 
 function generateNewProblem() {
     solutionDiv.style.display = "none";
     const problem = gameMode === "random" ? generateRandomProblem() : generateChainRuleProblem();
     currentAnswer = calculateAnswer(problem);
-    const options = generateOptions(currentAnswer.answer);
+    const options = generateOptions(currentAnswer);
     displayProblem(problem);
     displayOptions(options.sort(() => Math.random() - 0.5));
 }
@@ -48,30 +48,13 @@ function generateChainRuleProblem() {
 
 function calculateAnswer(problem) {
     const { a, b, operator } = problem;
-    let answer, steps;
     switch (operator) {
-        case '+':
-            answer = a + b;
-            steps = [`${a} + ${b} = ${answer}`];
-            break;
-        case '-':
-            answer = a - b;
-            steps = [`${a} - ${b} = ${answer}`];
-            break;
-        case '*':
-            answer = a * b;
-            steps = [`${a} * ${b} = ${answer}`];
-            break;
-        case '/':
-            answer = a / b;
-            steps = [`${a} / ${b} = ${answer}`];
-            break;
-        case "'":
-            answer = `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
-            steps = []; // Steps for chain rule problems will be handled later
-            break;
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
     }
-    return { answer, steps };
 }
 
 function generateOptions(answer) {
@@ -87,56 +70,51 @@ function generateOptions(answer) {
             { fn: 'cos(x)', derivative: '-sin(x)' },
             { fn: 'e^x', derivative: 'e^x' },
             { fn: 'ln(x)', derivative: '1/x' },
-    ];
-    while (options.size < 4) {
-        const a = functions[Math.floor(Math.random() * functions.length)];
-        const b = functions[Math.floor(Math.random() * functions.length)];
-        options.add(`(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`);
+        ];
+        while (options.size < 4) {
+            const a = functions[Math.floor(Math.random() * functions.length)];
+            const b = functions[Math.floor(Math.random() * functions.length)];
+            options.add(`(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`);
+        }
     }
-}
-return Array.from(options);
-
+    return Array.from(options);
 }
 
 function displayProblem(problem) {
-const problemElement = document.getElementById("problem");
-if (problem.operator === "'") {
-problemElement.innerHTML = y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\);
-} else {
-problemElement.innerHTML = \\(${problem.a} ${problem.operator} ${problem.b}\\);
-}
-MathJax.typeset(); // Update the LaTeX rendering
-}
-
-function displayOptions(options) {
-options.forEach((option, index) => {
-const optionElement = document.getElementById(option${index + 1});
-if (gameMode === "chainRule") {
-optionElement.innerHTML = \\(${option}\\);
-} else {
-optionElement.textContent = option;
-}
-optionElement.onclick = () => checkAnswer(option);
-});
-MathJax.typeset(); // Update the LaTeX rendering
-}
-
-function checkAnswer(selectedOption) {
-if (selectedOption === currentAnswer.answer) {
-let stepsHtml = currentAnswer.steps.map(step => <p>${step}</p>).join('');
-    
-   if (gameMode === "chainRule") {
-        correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer.answer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer.answer}\\)<br>${stepsHtml}`;
+    const problemElement = document.getElementById("problem");
+        if (problem.operator === "'") {
+        problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
     } else {
-        correctAnswerElem.innerHTML = `Correct answer: ${currentAnswer.answer}<br>Step-by-step solution:<br>${stepsHtml}`;
+        problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
     }
-    solutionDiv.style.display = "block";
     MathJax.typeset(); // Update the LaTeX rendering
 }
 
+function displayOptions(options) {
+    options.forEach((option, index) => {
+        const optionElement = document.getElementById(`option${index + 1}`);
+        if (gameMode === "chainRule") {
+            optionElement.innerHTML = `\\(${option}\\)`;
+        } else {
+            optionElement.textContent = option;
+        }
+        optionElement.onclick = () => checkAnswer(option);
+    });
+    MathJax.typeset(); // Update the LaTeX rendering
+}
+
+function checkAnswer(selectedOption) {
+    if (selectedOption === currentAnswer) {
+        if (gameMode === "chainRule") {
+            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer}\\)`;
+        } else {
+            correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
+        }
+        solutionDiv.style.display = "block";
+        MathJax.typeset(); // Update the LaTeX rendering
+    }
 }
 
 let gameMode;
 let currentProblem;
 let currentAnswer;
-
