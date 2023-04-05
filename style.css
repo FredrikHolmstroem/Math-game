@@ -18,8 +18,8 @@ body {
     border: none;
     color: white;
     text-align: center;
-    font-size: 14px;
-    padding: 10px 15px; /* Add padding around the text */
+    font-size: 13px;
+    padding: 5px 10px; /* Add padding around the text */
     display: inline-block; /* Auto-adjusts width and height based on the text */
     margin: 10px;
     cursor: pointer;
@@ -27,7 +27,7 @@ body {
     white-space: nowrap; /* Prevents line breaks inside the button */
     overflow: hidden; /* Hides any overflowing text */
     text-overflow: ellipsis; /* Shows "..." for overflowing text */
-    max-width: 400px; /* Set a maximum width for the button */
+    max-width: 450px; /* Set a maximum width for the button */
     word-wrap: break-word; /* Break words at the end of the line */
 }
 
