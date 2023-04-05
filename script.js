@@ -11,7 +11,7 @@ function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
-    currentProblem = generateNewProblem();
+    generateNewProblem();
 }
 
 function generateNewProblem() {
