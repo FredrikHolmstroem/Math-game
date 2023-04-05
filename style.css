@@ -39,7 +39,7 @@ body {
     white-space: normal;
     height: auto;
     min-height: 50px;
-    width: auto;
+    width: 300px;
 }
 
 .option-btn:hover {
