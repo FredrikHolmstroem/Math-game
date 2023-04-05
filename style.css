@@ -18,12 +18,15 @@ body {
     color: white;
     text-align: center;
     font-size: 18px;
-    width: 150px; /* Increase the width */
-    height: 50px; /* Increase the height */
+    padding: 15px 25px; /* Add padding to increase the size */
     margin: 10px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    white-space: nowrap; /* Prevents line breaks inside the button */
+    overflow: hidden; /* Hides any overflowing text */
+    text-overflow: ellipsis; /* Shows "..." for overflowing text */
 }
+
 
 
 .option-btn:hover {
