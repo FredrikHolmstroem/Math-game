@@ -10,7 +10,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 800px; /* Increase the width of the game screen */
+    width: 1200px; /* Increase the width of the game screen */
 }
 
 .option-btn {
@@ -19,7 +19,7 @@ body {
     color: white;
     text-align: center;
     font-size: 14px;
-    width: 180px; /* Increase the width of the boxes */
+    width: 250px; /* Increase the width of the boxes */
     height: 80px; /* Increase the height of the boxes */
     line-height: 80px; /* Vertically center the text */
     margin: 10px;
