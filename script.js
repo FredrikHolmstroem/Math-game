@@ -43,35 +43,20 @@ function generateChainRuleProblem() {
     const a = functions[Math.floor(Math.random() * functions.length)];
     let b;
     let operator;
-    if (Math.random() < 0.25) {
-        // Generate a chain rule problem with one level of nesting
-        b = functions[Math.floor(Math.random() * functions.length)];
-        operator = "'";
-    } else if (Math.random() < 0.5) {
-        // Generate a chain rule problem with two levels of nesting
-        const c = functions[Math.floor(Math.random() * functions.length)];
-        b = { fn: `(${c.fn})^2`, derivative: `2(${c.fn})(${c.derivative})` };
-        operator = "'";
-    } else if (Math.random() < 0.75) {
-        // Generate a chain rule problem with three levels of nesting
-        const d = functions[Math.floor(Math.random() * functions.length)];
-        const e = functions[Math.floor(Math.random() * functions.length)];
-        b = { fn: `(${d.fn})(${e.fn})`, derivative: `(${d.derivative})(${e.fn}) + (${d.fn})(${e.derivative})` };
-        operator = "'";
-    } else {
-        // Generate a chain rule problem with four levels of nesting
-        const f = functions[Math.floor(Math.random() * functions.length)];
-        const g = functions[Math.floor(Math.random() * functions.length)];
-        const h = functions[Math.floor(Math.random() * functions.length)];
-        b = {
-            fn: `(${f.fn})(${g.fn})(${h.fn})`,
-            derivative: `(${f.derivative})(${g.fn})(${h.fn}) + (${f.fn})(${g.derivative})(${h.fn}) + (${f.fn})(${g.fn})(${h.derivative})`
-        };
-        operator = "'";
+    const numNestings = Math.floor(Math.random() * 10) + 1; // Choose a random number of nestings between 1 and 10
+    let prevDerivative = a.derivative;
+    let prevFn = a.fn;
+    for (let i = 0; i < numNestings; i++) {
+        const nextFn = functions[Math.floor(Math.random() * functions.length)].fn;
+        const nextDerivative = `(${prevDerivative})(${nextFn}) + (${prevFn})(${functions[Math.floor(Math.random() * functions.length)].derivative})`;
+        prevFn = `(${prevFn})(${nextFn})`;
+        prevDerivative = nextDerivative;
     }
-
+    b = { fn: prevFn, derivative: prevDerivative };
+    operator = "'";
     return { a, b, operator };
 }
+
 
 
 function calculateAnswer(problem) {
