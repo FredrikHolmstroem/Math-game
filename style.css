@@ -27,7 +27,7 @@ body {
     white-space: nowrap; /* Prevents line breaks inside the button */
     overflow: hidden; /* Hides any overflowing text */
     text-overflow: ellipsis; /* Shows "..." for overflowing text */
-    max-width: 180px; /* Set a maximum width for the button */
+    max-width: 400px; /* Set a maximum width for the button */
     word-wrap: break-word; /* Break words at the end of the line */
 }
 
