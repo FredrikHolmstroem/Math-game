@@ -76,7 +76,7 @@ function calculateAnswer(problem) {
 
 
 function generateOptions(answer) {
-    const options = new Set([answer]);
+    const options = new Set([answer.answer]);
     if (gameMode === "random") {
         while (options.size < 4) {
             options.add(Math.floor(Math.random() * 100));
@@ -97,6 +97,7 @@ function generateOptions(answer) {
     }
     return Array.from(options);
 }
+
 
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
@@ -120,6 +121,7 @@ function displayOptions(options) {
     });
     MathJax.typeset(); // Update the LaTeX rendering
 }
+
 
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer.answer) {
