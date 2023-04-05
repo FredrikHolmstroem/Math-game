@@ -160,3 +160,66 @@ let gameMode;
 let currentProblem;
 let currentAnswer;
 
+document.getElementById("start-random").addEventListener("click", () => startGame("random"));
+document.getElementById("start-chain-rule").addEventListener("click", () => startGame("chainRule"));
+
+const gameMenu = document.getElementById("game-menu");
+const gameBoard = document.getElementById("game-board");
+const solutionDiv = document.getElementById("solution");
+const correctAnswerElem = document.getElementById("correct-answer");
+const nextBtn = document.getElementById("next-btn");
+
+function startGame(gameType) {
+gameMenu.style.display = "none";
+gameBoard.style.display = "block";
+gameMode = gameType;
+currentProblem = generateNewProblem();
+}
+
+function generateNewProblem() {
+solutionDiv.style.display = "none";
+const problem = gameMode === "random" ? generateRandomProblem() : generateChainRuleProblem();
+currentAnswer = calculateAnswer(problem);
+const options = generateOptions(currentAnswer);
+displayProblem(problem);
+displayOptions(options.sort(() => Math.random() - 0.5));
+}
+
+function generateRandomProblem() {
+const a = Math.floor(Math.random() * 10) + 1;
+const b = Math.floor(Math.random() * 10) + 1;
+const operator = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
+return { a, b, operator };
+}
+
+function generateChainRuleProblem() {
+const functions = [
+{ fn: 'x^2', derivative: '2x' },
+{ fn: 'sin(x)', derivative: 'cos(x)' },
+{ fn: 'cos(x)', derivative: '-sin(x)' },
+{ fn: 'e^x', derivative: 'e^x' },
+{ fn: 'ln(x)', derivative: '1/x' },
+];
+const a = functions[Math.floor(Math.random() * functions.length)];
+const b = functions[Math.floor(Math.random() * functions.length)];
+
+return { a, b, operator: "'" };
+}
+
+function calculateAnswer(problem) {
+const { a, b, operator } = problem;
+
+switch (operator) {
+case '+': return a + b;
+case '-': return a - b;
+case '*': return a * b;
+case '/': return a / b;
+case "'": {
+const aDerivative = a.derivative.replace('x', (${b.fn}));
+const bDerivative = b.derivative.replace('x', (${a.fn}));
+return (${aDerivative})(${b.fn}) + (${bDerivative})(${a.fn});
+}
+}
+}
+
+nextBtn.addEventListener("click", generateNewProblem);
