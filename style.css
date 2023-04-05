@@ -24,11 +24,11 @@ body {
     margin: 10px;
     cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    max-width: 180px; /* Set a maximum width for the button */
+    max-width: 400px; /* Set a maximum width for the button */
     word-wrap: break-word; /* Break words at the end of the line */
     white-space: normal; /* Allow text to wrap to multiple lines */
     height: auto; /* Allow the height to adjust automatically */
-    min-height: 50px; /* Set a minimum height for the button */
+    min-height: 100px; /* Set a minimum height for the button */
 }
 
 
