@@ -48,14 +48,32 @@ function generateChainRuleProblem() {
 
 function calculateAnswer(problem) {
     const { a, b, operator } = problem;
+    let answer, steps;
     switch (operator) {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
-        case '/': return a / b;
-        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
+        case '+':
+            answer = a + b;
+            steps = [`${a} + ${b} = ${answer}`];
+            break;
+        case '-':
+            answer = a - b;
+            steps = [`${a} - ${b} = ${answer}`];
+            break;
+        case '*':
+            answer = a * b;
+            steps = [`${a} * ${b} = ${answer}`];
+            break;
+        case '/':
+            answer = a / b;
+            steps = [`${a} / ${b} = ${answer}`];
+            break;
+        case "'": // Keep the existing logic for chain rule problems
+            answer = `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
+            steps = []; // Steps for chain rule problems will be handled later
+            break;
     }
+    return { answer, steps };
 }
+
 
 function generateOptions(answer) {
     const options = new Set([answer]);
@@ -104,16 +122,19 @@ function displayOptions(options) {
 }
 
 function checkAnswer(selectedOption) {
-    if (selectedOption === currentAnswer) {
+    if (selectedOption === currentAnswer.answer) {
+        let stepsHtml = currentAnswer.steps.map(step => `<p>${step}</p>`).join('');
+
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer}\\)`;
+            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer.answer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer.answer}\\)<br>${stepsHtml}`;
         } else {
-            correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
+            correctAnswerElem.innerHTML = `Correct answer: ${currentAnswer.answer}<br>Step-by-step solution:<br>${stepsHtml}`;
         }
         solutionDiv.style.display = "block";
         MathJax.typeset(); // Update the LaTeX rendering
     }
 }
+
 
 let gameMode;
 let currentProblem;
