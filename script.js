@@ -12,7 +12,42 @@ function startGame(gameType) {
     gameMenu.style.display = "none";
     gameBoard.style.display = "block";
     gameMode = gameType;
-    currentProblem = generateNewProblem();
+    generateNewProblem();
+}
+
+function generateChainRuleLevel2Problem() {
+    const functions = [
+        { fn: 'x^2', derivative: '2x' },
+        { fn: 'sin(x)', derivative: 'cos(x)' },
+        { fn: 'cos(x)', derivative: '-sin(x)' },
+        { fn: 'e^x', derivative: 'e^x' },
+        { fn: 'ln(x)', derivative: '1/x' },
+        { fn: 'tan(x)', derivative: 'sec^2(x)' },
+        { fn: 'sec(x)', derivative: 'sec(x)tan(x)' },
+    ];
+
+    const a = functions[Math.floor(Math.random() * functions.length)];
+    const b = functions[Math.floor(Math.random() * functions.length)];
+    const c = functions[Math.floor(Math.random() * functions.length)];
+
+    const k1 = Math.floor(Math.random() * 5) + 1;
+    const k2 = Math.floor(Math.random() * 5) + 1;
+    const k3 = Math.floor(Math.random() * 5) + 1;
+
+    // Generate a nested chain rule problem with constants
+    return { a, b, c, operator: "''", k1, k2, k3 };
+}
+
+function calculateAnswer(problem) {
+    const { a, b, c, operator, k1, k2, k3 } = problem;
+    switch (operator) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
+        case "''": return `(${k1 * a.derivative})(${k2 * b.fn})(${k3 * c.fn}) + (${k1 * a.fn})(${k2 * b.derivative})(${k3 * c.fn}) + (${k1 * a.fn})(${k2 * b.fn})(${k3 * c.derivative})`; // Nested chain rule with constants
+    }
 }
 
 function generateNewProblem() {
@@ -52,33 +87,6 @@ function generateChainRuleProblem() {
     return { a, b, operator: "'" };
 }
 
-function generateChainRuleLevel2Problem() {
-    const functions = [
-        { fn: 'x^3', derivative: '3x^2' },
-        { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
-        { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
-        { fn: 'tan(x)', derivative: 'sec^2(x)' },
-    ];
-    const a = functions[Math.floor(Math.random() * functions.length)];
-    const b = functions[Math.floor(Math.random() * functions.length)];
-
-    return { a, b, operator: "'" };
-}
-
-function calculateAnswer(problem) {
-    const { a, b, operator } = problem;
-    switch (operator) {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
-        case '/': return a / b;
-        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`;
-    }
-}
-
 function generateOptions(answer) {
     const options = new Set([answer]);
     if (gameMode === "random") {
@@ -87,13 +95,11 @@ function generateOptions(answer) {
         }
     } else {
         const functions = [
-            { fn: 'x^3', derivative: '3x^2' },
             { fn: 'x^2', derivative: '2x' },
             { fn: 'sin(x)', derivative: 'cos(x)' },
             { fn: 'cos(x)', derivative: '-sin(x)' },
             { fn: 'e^x', derivative: 'e^x' },
             { fn: 'ln(x)', derivative: '1/x' },
-            { fn: 'tan(x)', derivative: 'sec^2(x)' },
         ];
         while (options.size < 4) {
             const a = functions[Math.floor(Math.random() * functions.length)];
@@ -106,8 +112,8 @@ function generateOptions(answer) {
 
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
-    if (problem.operator === "'") {
-        problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
+    if (problem.operator === "'" || problem.operator === "''") {
+        problemElement.innerHTML = `y = \\(${problem.k1 * problem.a.fn}\\)\\(${problem.k2 * problem.b.fn}\\)\\(${problem.k3 * problem.c.fn}\\)`;
     } else {
         problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
     }
@@ -139,13 +145,18 @@ function checkAnswer(selectedOption) {
     }
 }
 
-nextBtn.addEventListener("click", () => {
-    solutionDiv.style.display = "none";
-    generateNewProblem();
-});
-
-
 let gameMode;
-let currentProblem;
+let currentProblem
 let currentAnswer;
 
+nextBtn.addEventListener("click", generateNewProblem);
+
+// MathJax configuration
+MathJax = {
+tex: {
+inlineMath: [['$', '$'], ['\(', '\)']]
+},
+svg: {
+fontCache: 'global'
+}
+};
