@@ -34,35 +34,17 @@ function generateRandomProblem() {
 
 function generateChainRuleProblem() {
     const functions = [
-        { fn: `${Math.floor(Math.random() * 10) + 1}x^2`, derivative: `${2 * (Math.floor(Math.random() * 10) + 1)}x` },
-        { fn: `${Math.floor(Math.random() * 10) + 1}x^3`, derivative: `${3 * (Math.floor(Math.random() * 10) + 1)}x^2` },
-        { fn: `${Math.floor(Math.random() * 10) + 1}x^4`, derivative: `${4 * (Math.floor(Math.random() * 10) + 1)}x^3` },
-        { fn: `sin(${Math.floor(Math.random() * 10) + 1}x)`, derivative: `${Math.floor(Math.random() * 10) + 1}cos(${Math.floor(Math.random() * 10) + 1}x)` },
-        { fn: `cos(${Math.floor(Math.random() * 10) + 1}x)`, derivative: `-${Math.floor(Math.random() * 10) + 1}sin(${Math.floor(Math.random() * 10) + 1}x)` },
-        { fn: `${Math.floor(Math.random() * 10) + 1}e^x`, derivative: `${Math.floor(Math.random() * 10) + 1}e^x` },
-        { fn: `ln(${Math.floor(Math.random() * 10) + 1}x)`, derivative: `1/(${Math.floor(Math.random() * 10) + 1}x)` },
+        { fn: 'x^2', derivative: '2x' },
+        { fn: 'sin(x)', derivative: 'cos(x)' },
+        { fn: 'cos(x)', derivative: '-sin(x)' },
+        { fn: 'e^x', derivative: 'e^x' },
+        { fn: 'ln(x)', derivative: '1/x' },
     ];
     const a = functions[Math.floor(Math.random() * functions.length)];
-    let b;
-    let operator;
-    const numNestings = Math.floor(Math.random() * 1); // Choose a random number of nestings between 1 and 10, add + 1 if you want to do more than 1 after * 1)
-    let prevDerivative = a.derivative;
-    let prevFn = a.fn;
-    for (let i = 0; i < numNestings; i++) {
-        const nextFn = functions[Math.floor(Math.random() * functions.length)].fn;
-        const nextDerivative = `(${prevDerivative})(${nextFn}) + (${prevFn})(${functions[Math.floor(Math.random() * functions.length)].derivative})`;
-        prevFn = `(${prevFn})(${nextFn})`;
-        prevDerivative = nextDerivative;
-    }
-    b = { fn: prevFn, derivative: prevDerivative };
-    operator = "'";
-    return { a, b, operator };
+    const b = functions[Math.floor(Math.random() * functions.length)];
+
+    return { a, b, operator: "'" };
 }
-
-
-
-
-
 
 function calculateAnswer(problem) {
     const { a, b, operator } = problem;
@@ -100,36 +82,28 @@ function generateOptions(answer) {
 
 function displayProblem(problem) {
     const problemElement = document.getElementById("problem");
-        if (problem.operator === "'") {
-        problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
+    if (problem.operator === "'") {
+        problemElement.textContent = `y = ${problem.a.fn}(${problem.b.fn})`;
     } else {
-        problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
+        problemElement.textContent = `${problem.a} ${problem.operator} ${problem.b}`;
     }
-    MathJax.typeset(); // Update the LaTeX rendering
 }
 
 function displayOptions(options) {
     options.forEach((option, index) => {
         const optionElement = document.getElementById(`option${index + 1}`);
-        if (gameMode === "chainRule") {
-            optionElement.innerHTML = `\\(${option}\\)`;
-        } else {
-            optionElement.textContent = option;
-        }
+        optionElement.textContent = option;
         optionElement.onclick = () => checkAnswer(option);
     });
-    MathJax.typeset(); // Update the LaTeX rendering
 }
 
 function checkAnswer(selectedOption) {
     if (selectedOption === currentAnswer) {
+        correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
         if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer}\\)`;
-        } else {
-            correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
+            correctAnswerElem.innerHTML += `<br>Step-by-step solution (simplified):<br>dy/dx = ${currentAnswer}`;
         }
         solutionDiv.style.display = "block";
-        MathJax.typeset(); // Update the LaTeX rendering
     }
 }
 
