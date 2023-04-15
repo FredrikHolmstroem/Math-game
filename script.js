@@ -1,7 +1,7 @@
 const questionEl = document.getElementById('question');
 const scoreEl = document.getElementById('score');
 const solutionEl = document.getElementById('solution');
-const answerContainer = document.querySelector('.answer-container');
+const answerContainer = document.getElementById('answer-container');
 
 const difficulties = ['easy', 'medium', 'hard'];
 let currentProblem = null;
@@ -72,3 +72,4 @@ function initGame() {
 }
 
 initGame();
+
