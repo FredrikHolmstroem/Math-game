@@ -76,33 +76,33 @@ document.addEventListener("DOMContentLoaded", function () {
     for (let i = 0; i < 4; i++) {
       const button = document.createElement("button");
       if (i === correctAnswerIndex) {
-       button.textContent = problem.correctAnswer;
-} else {
-const wrongIndex = Math.floor(Math.random() * wrongAnswers.length);
-button.textContent = wrongAnswers[wrongIndex];
-wrongAnswers.splice(wrongIndex, 1);
-}
+        button.textContent = problem.correctAnswer;
+      } else {
+        const wrongIndex = Math.floor(Math.random() * wrongAnswers.length);
+        button.textContent = wrongAnswers[wrongIndex];
+        wrongAnswers.splice(wrongIndex, 1);
+      }
 
-  button.innerHTML = '\\(' + button.textContent + '\\)';
-  button.onclick = function () {
-    if (i === correctAnswerIndex) {
-      currentScore++;
-      scoreEl.textContent = "Score: " + currentScore;
-      displaySolution(problem.solution);
-      answerContainer.style.display = "none";
+      button.innerHTML = '\\(' + button.textContent + '\\)';
+      button.onclick = function () {
+        if (i === correctAnswerIndex) {
+          currentScore++;
+          scoreEl.textContent = "Score: " + currentScore;
+          displaySolution(problem.solution);
+          answerContainer.style.display = "none";
+        }
+      };
+      answerContainer.appendChild(button);
+      MathJax.typeset();
     }
-  };
-  answerContainer.appendChild(button);
-  MathJax.typeset();
-}
-}
+  }
 
-function displaySolution(solution) {
-solutionEl.style.display = "block";
-solutionEl.querySelector(".latex-solution").innerHTML = solution.map(step => '\(' + step.latex + '\) ' + step.text).join("<br>");
-const nextButton = document.createElement("button");
-nextButton.textContent = "Next Problem";
-nextButton.onclick = function () {
+  function displaySolution(solution) {
+    solutionEl.style.display = "block";
+    solutionEl.querySelector(".latex-solution").innerHTML = solution.map(step => '\\(' + step.latex + '\\) ' + step.text).join("<br>");
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next Problem";
+    nextButton.onclick = function () {
 solutionEl.style.display = "none";
 solutionEl.querySelector(".latex-solution").innerHTML = "";
 solutionEl.removeChild(nextButton);
@@ -115,7 +115,6 @@ MathJax.typeset();
 }
 
 function initGame() {
-const difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
 currentProblem = generateProblem(selectedRule, selectedDifficulty);
 displayProblem(currentProblem);
 generateAnswers(currentProblem);
