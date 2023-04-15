@@ -1,122 +1,159 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const mainMenu = document.getElementById("main-menu");
-  const ruleContainer = document.getElementById("rule-container");
-  const difficultyContainer = document.getElementById("difficulty-container");
-  const startButton = document.getElementById("start-button");
+  const mainMenu = document.querySelector(".main-menu");
+  const gameEl = document.querySelector(".game");
+  const problemEl = document.querySelector(".problem");
+  const answerContainer = document.querySelector(".answers");
+  const solutionEl = document.querySelector(".solution");
+  const scoreEl = document.querySelector(".score");
 
-  const gameContainer = document.getElementById("game-container");
-  const questionEl = document.getElementById("question");
-  const scoreEl = document.getElementById("score");
-  const solutionEl = document.getElementById("solution");
-  const answerContainer = document.getElementById("answer-container");
+  const ruleBtns = document.querySelectorAll(".rule-btn");
+  const difficultyBtns = document.querySelectorAll(".difficulty-btn");
+  const startGameBtn = document.getElementById("start-game");
 
-  const rules = ["Product Rule", "Chain Rule", "Quotient Rule"];
-  let selectedRule = rules[0];
+  let selectedRule = null;
+  let selectedDifficulty = null;
+  let currentProblem = null;
+  let score = 0;
 
-  const difficulties = ["1", "2", "3"];
-  let selectedDifficulty = difficulties[0];
+  ruleBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      ruleBtns.forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedRule = btn.textContent.trim();
+    });
+  });
 
-  function createRuleButtons() {
-    for (const rule of rules) {
-      const button = document.createElement("button");
-      button.textContent = rule;
-      button.onclick = function () {
-        selectedRule = rule;
-        ruleContainer.querySelectorAll("button").forEach((btn) => {
-          btn.classList.remove("selected");
-        });
-        button.classList.add("selected");
-      };
-      if (selectedRule === rule) {
-        button.classList.add("selected");
-      }
-      ruleContainer.appendChild(button);
+  difficultyBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      difficultyBtns.forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedDifficulty = parseInt(btn.textContent.trim(), 10);
+    });
+  });
+
+  startGameBtn.addEventListener("click", function () {
+    if (selectedRule && selectedDifficulty) {
+      mainMenu.style.display = "none";
+      gameEl.style.display = "block";
+      generateProblem();
     }
-  }
+  });
 
-  function createDifficultyButtons() {
-    for (const difficulty of difficulties) {
-      const button = document.createElement("button");
-      button.textContent = difficulty;
-      button.onclick = function () {
-        selectedDifficulty = difficulty;
-        difficultyContainer.querySelectorAll("button").forEach((btn) => {
-          btn.classList.remove("selected");
-        });
-        button.classList.add("selected");
-      };
-      if (selectedDifficulty === difficulty) {
-        button.classList.add("selected");
+  function generateProblem(rule, difficulty) {
+  const productRuleProblems = {
+    1: [
+      {
+        expression: "x^2 (2x)",
+        correctAnswer: "2x^3 + 4x^2",
+        wrongAnswers: ["2x^5", "6x^2", "x^3"],
+        solution: [
+          {
+            latex: "x^2 \\cdot 2x",
+            text: "Apply the product rule (uv)' = u'v + uv'"
+          },
+          {
+            latex: "u = x^2 \\Rightarrow u' = 2x",
+            text: "Derivative of x^2"
+          },
+          {
+            latex: "v = 2x \\Rightarrow v' = 2",
+            text: "Derivative of 2x"
+          },
+          {
+            latex: "(x^2)'(2x) + (x^2)(2x)'",
+            text: "Substitute u, u', v, and v' into the product rule formula"
+          },
+          {
+            latex: "2x(2x) + x^2(2)",
+            text: "Simplify the expression"
+          },
+          {
+            latex: "2x^3 + 4x^2",
+            text: "Final result"
+          }
+        ]
+      },
+      {
+        expression: "x^3 (3x^2)",
+        correctAnswer: "6x^5 + 9x^4",
+        wrongAnswers: ["3x^5", "12x^5", "9x^3"],
+        solution: [
+          // Fill in the solution steps for this problem
+        ]
       }
-      difficultyContainer.appendChild(button);
-    }
-  }
-
-  startButton.onclick = function () {
-    mainMenu.style.display = "none";
-    gameContainer.style.display = "block";
-    initGame();
+    ],
+    2: [
+      // Add more problems for product rule with difficulty 2
+    ],
+    3: [
+      // Add more problems for product rule with difficulty 3
+    ]
   };
 
-  createRuleButtons();
-  createDifficultyButtons();
+  const chainRuleProblems = {
+    1: [
+      // Add problems for chain rule with difficulty 1
+    ],
+    2: [
+      // Add problems for chain rule with difficulty 2
+    ],
+    3: [
+      // Add problems for chain rule with difficulty 3
+    ]
+  };
 
-  let currentScore = 0;
-  let currentProblem;
+  const quotientRuleProblems = {
+    1: [
+      // Add problems for quotient rule with difficulty 1
+    ],
+    2: [
+      // Add problems for quotient rule with difficulty 2
+    ],
+    3: [
+      // Add problems for quotient rule with difficulty 3
+    ]
+  };
 
-  function displayProblem(problem) {
-    questionEl.innerHTML = '\\(' + problem.expression + '\\)';
-    MathJax.typeset();
+  let problems;
+  if (rule === "Product Rule") {
+    problems = productRuleProblems[difficulty];
+  } else if (rule === "Chain Rule") {
+    problems = chainRuleProblems[difficulty];
+  } else {
+    problems = quotientRuleProblems[difficulty];
   }
 
-  function generateAnswers(problem) {
-    const correctAnswerIndex = Math.floor(Math.random() * 4);
-    const wrongAnswers = [...problem.wrongAnswers];
+  return problems[Math.floor(Math.random() * problems.length)];
+}
 
-    for (let i = 0; i < 4; i++) {
-      const button = document.createElement("button");
-      if (i === correctAnswerIndex) {
-        button.textContent = problem.correctAnswer;
-      } else {
-        const wrongIndex = Math.floor(Math.random() * wrongAnswers.length);
-        button.textContent = wrongAnswers[wrongIndex];
-        wrongAnswers.splice(wrongIndex, 1);
-      }
 
-      button.innerHTML = '\\(' + button.textContent + '\\)';
-      button.onclick = function () {
-        if (i === correctAnswerIndex) {
-          currentScore++;
-          scoreEl.textContent = "Score: " + currentScore;
-          displaySolution(problem.solution);
-          answerContainer.style.display = "none";
-        }
-      };
-      answerContainer.appendChild(button);
-      MathJax.typeset();
+    renderProblem();
+  }
+
+  function renderProblem() {
+    problemEl.textContent = currentProblem.text;
+    answerContainer.innerHTML = "";
+
+    currentProblem.choices.forEach((choice, index) => {
+      const btn = document.createElement("button");
+      btn.classList.add("answer-btn");
+      btn.textContent = choice;
+      btn.addEventListener("click", () => handleAnswer(index));
+      answerContainer.appendChild(btn);
+    });
+
+    solutionEl.style.display = "none";
+  }
+
+  function handleAnswer(index) {
+    if (index === currentProblem.correctIndex) {
+      score++;
+      scoreEl.textContent = "Score: " + score;
+      solutionEl.style.display = "block";
+      solutionEl.querySelector(".latex-solution").innerHTML = currentProblem.solution;
+      setTimeout(() => {
+        generateProblem();
+      }, 5000);
     }
   }
-
-  function displaySolution(solution) {
-    solutionEl.style.display = "block";
-    solutionEl.querySelector(".latex-solution").innerHTML = solution.map(step => '\\(' + step.latex + '\\) ' + step.text).join("<br>");
-    const nextButton = document.createElement("button");
-nextButton.textContent = "Next Problem";
-nextButton.onclick = function () {
-solutionEl.style.display = "none";
-solutionEl.querySelector(".latex-solution").innerHTML = "";
-solutionEl.removeChild(nextButton);
-answerContainer.innerHTML = "";
-answerContainer.style.display = "flex";
-initGame();
-};
-solutionEl.appendChild(nextButton);
-MathJax.typeset();
-}
-
-function initGame() {
-currentProblem = generateProblem(selectedRule, selectedDifficulty);
-displayProblem(currentProblem);
-generateAnswers(currentProblem);
-}
 });
