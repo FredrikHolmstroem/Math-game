@@ -22,51 +22,66 @@ document.addEventListener("DOMContentLoaded", function () {
       button.textContent = rule;
       button.onclick = function () {
         selectedRule = rule;
+        ruleContainer.querySelectorAll("button").forEach((btn) => {
+          btn.classList.remove("selected");
+        });
+        button.classList.add("selected");
       };
+      if (selectedRule === rule) {
+        button.classList.add("selected");
+      }
       ruleContainer.appendChild(button);
-}
-}
-
-function createDifficultyButtons() {
-for (const difficulty of difficulties) {
-const button = document.createElement("button");
-button.textContent = difficulty;
-button.onclick = function () {
-selectedDifficulty = difficulty;
-};
-difficultyContainer.appendChild(button);
-}
-}
-
-startButton.onclick = function () {
-mainMenu.style.display = "none";
-gameContainer.style.display = "block";
-initGame();
-};
-
-createRuleButtons();
-createDifficultyButtons();
-
-let currentScore = 0;
-let currentProblem;
-
-function displayProblem(problem) {
-questionEl.innerHTML = '\(' + problem.expression + '\)';
-MathJax.typeset();
-}
-
-function generateAnswers(problem) {
-const correctAnswerIndex = Math.floor(Math.random() * 4);
-const wrongAnswers = [...problem.wrongAnswers];
-for (let i = 0; i < 4; i++) {
-  const button = document.createElement("button");
-  if (i === correctAnswerIndex) {
-    button.textContent = problem.correctAnswer;
-  } else {
-    const wrongIndex = Math.floor(Math.random() * wrongAnswers.length);
-    button.textContent = wrongAnswers[wrongIndex];
-    wrongAnswers.splice(wrongIndex, 1);
+    }
   }
+
+  function createDifficultyButtons() {
+    for (const difficulty of difficulties) {
+      const button = document.createElement("button");
+      button.textContent = difficulty;
+      button.onclick = function () {
+        selectedDifficulty = difficulty;
+        difficultyContainer.querySelectorAll("button").forEach((btn) => {
+          btn.classList.remove("selected");
+        });
+        button.classList.add("selected");
+      };
+      if (selectedDifficulty === difficulty) {
+        button.classList.add("selected");
+      }
+      difficultyContainer.appendChild(button);
+    }
+  }
+
+  startButton.onclick = function () {
+    mainMenu.style.display = "none";
+    gameContainer.style.display = "block";
+    initGame();
+  };
+
+  createRuleButtons();
+  createDifficultyButtons();
+
+  let currentScore = 0;
+  let currentProblem;
+
+  function displayProblem(problem) {
+    questionEl.innerHTML = '\\(' + problem.expression + '\\)';
+    MathJax.typeset();
+  }
+
+  function generateAnswers(problem) {
+    const correctAnswerIndex = Math.floor(Math.random() * 4);
+    const wrongAnswers = [...problem.wrongAnswers];
+
+    for (let i = 0; i < 4; i++) {
+      const button = document.createElement("button");
+      if (i === correctAnswerIndex) {
+       button.textContent = problem.correctAnswer;
+} else {
+const wrongIndex = Math.floor(Math.random() * wrongAnswers.length);
+button.textContent = wrongAnswers[wrongIndex];
+wrongAnswers.splice(wrongIndex, 1);
+}
 
   button.innerHTML = '\\(' + button.textContent + '\\)';
   button.onclick = function () {
@@ -80,31 +95,4 @@ for (let i = 0; i < 4; i++) {
   answerContainer.appendChild(button);
   MathJax.typeset();
 }
-}
 
-function displaySolution(solution) {
-solutionEl.style.display = "block";
-solutionEl.querySelector(".latex-solution").innerHTML = solution.map(step => '\(' + step.latex + '\) ' + step.text).join("<br>");
-const nextButton = document.createElement("button");
-nextButton.textContent = "Next Problem";
-nextButton.onclick = function () {
-solutionEl.style.display = "none";
-solutionEl.querySelector(".latex-solution").innerHTML = "";
-solutionEl.removeChild(nextButton);
-answerContainer.innerHTML = "";
-answerContainer.style.display = "flex";
-initGame();
-};
-solutionEl.appendChild(nextButton);
-MathJax.typeset();
-}
-
-function initGame() {
-const difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
-currentProblem = generateProblem(selectedRule, selectedDifficulty);
-displayProblem(currentProblem);
-generateAnswers(currentProblem);
-}
-
-initGame();
-});
