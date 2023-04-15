@@ -1,47 +1,59 @@
 body {
-  font-family: Arial, sans-serif;
-}
-
-#main-menu,
-#game-container {
-  text-align: center;
-}
-
-#rule-container,
-#difficulty-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 button {
-  padding: 10px 15px;
-  font-size: 18px;
-  margin: 5px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
 }
 
-button.selected {
-  background-color: #007bff;
-  color: #fff;
+button:focus {
+    outline: none;
 }
 
-#question {
-  font-size: 24px;
-  margin-bottom: 20px;
+button:focus-visible {
+    box-shadow: 0 0 0 2px rgba(0, 0, 255, 0.8);
 }
 
-#score {
-  font-size: 20px;
-  margin-bottom: 20px;
+.answers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-#answer-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.answer-btn {
+    margin: 5px;
+    width: 100px;
+    height: 100px;
+    font-size: 18px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
-#solution {
-  margin-top: 20px;
+.main-menu,
+.game {
+    display: none;
+}
+
+.game {
+    display: block;
+}
+
+.problem {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.solution {
+    display: none;
+    text-align: left;
+    margin: 0 auto;
+    width: 60%;
+}
+
+.latex-solution {
+    font-size: 24px;
 }
