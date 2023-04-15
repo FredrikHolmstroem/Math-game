@@ -101,18 +101,17 @@ document.addEventListener("DOMContentLoaded", function () {
     solutionEl.style.display = "block";
     solutionEl.querySelector(".latex-solution").innerHTML = solution.map(step => '\\(' + step.latex + '\\) ' + step.text).join("<br>");
     const nextButton = document.createElement("button");
-    nextButton.textContent = "Next Problem";
+nextButton.textContent = "Next Problem";
 nextButton.onclick = function () {
-  solutionEl.style.display = "none";
-  solutionEl.querySelector(".latex-solution").innerHTML = "";
-  solutionEl.removeChild(nextButton);
-  answerContainer.innerHTML = "";
-  answerContainer.style.display = "flex";
-  initGame();
+solutionEl.style.display = "none";
+solutionEl.querySelector(".latex-solution").innerHTML = "";
+solutionEl.removeChild(nextButton);
+answerContainer.innerHTML = "";
+answerContainer.style.display = "flex";
+initGame();
 };
 solutionEl.appendChild(nextButton);
 MathJax.typeset();
-    
 }
 
 function initGame() {
@@ -120,6 +119,4 @@ currentProblem = generateProblem(selectedRule, selectedDifficulty);
 displayProblem(currentProblem);
 generateAnswers(currentProblem);
 }
-
-initGame();
 });
