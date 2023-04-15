@@ -68,7 +68,7 @@ function initGame() {
   const difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
   currentProblem = generateProblem(difficulty);
   displayProblem(currentProblem);
-  generateAnswers(currentProblem);
+  generateAnswers(currentProblem); // Call the generateAnswers() function here
 }
 
 initGame();
