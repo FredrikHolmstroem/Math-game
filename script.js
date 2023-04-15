@@ -1,120 +1,74 @@
-const gameMenu = document.getElementById("game-menu");
-const gameBoard = document.getElementById("game-board");
-const solutionDiv = document.getElementById("solution");
-const correctAnswerElem = document.getElementById("correct-answer");
-const nextBtn = document.getElementById("next-btn");
+const questionEl = document.getElementById('question');
+const scoreEl = document.getElementById('score');
+const solutionEl = document.getElementById('solution');
+const answerContainer = document.querySelector('.answer-container');
 
-document.getElementById("start-random").addEventListener("click", () => startGame("random"));
-document.getElementById("start-chain-rule").addEventListener("click", () => startGame("chainRule"));
+const difficulties = ['easy', 'medium', 'hard'];
+let currentProblem = null;
+let currentScore = 0;
 
-function startGame(gameType) {
-    gameMenu.style.display = "none";
-    gameBoard.style.display = "block";
-    gameMode = gameType;
-    currentProblem = generateNewProblem();
-}
-
-function generateNewProblem() {
-    solutionDiv.style.display = "none";
-    const problem = gameMode === "random" ? generateRandomProblem() : generateChainRuleProblem();
-    currentAnswer = calculateAnswer(problem);
-    const options = generateOptions(currentAnswer);
-    displayProblem(problem);
-    displayOptions(options.sort(() => Math.random() - 0.5));
-}
-
-nextBtn.addEventListener("click", generateNewProblem);
-
-function generateRandomProblem() {
-    const a = Math.floor(Math.random() * 10) + 1;
-    const b = Math.floor(Math.random() * 10) + 1;
-    const operator = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
-    return { a, b, operator };
-}
-
-function generateChainRuleProblem() {
-    const functions = [
-        { fn: 'x^2', derivative: '2x' },
-        { fn: 'sin(x)', derivative: 'cos(x)' },
-        { fn: 'cos(x)', derivative: '-sin(x)' },
-        { fn: 'e^x', derivative: 'e^x' },
-        { fn: 'ln(x)', derivative: '1/x' },
-    ];
-    const a = functions[Math.floor(Math.random() * functions.length)];
-    const b = functions[Math.floor(Math.random() * functions.length)];
-
-    return { a, b, operator: "'" };
-}
-
-function calculateAnswer(problem) {
-    const { a, b, operator } = problem;
-    switch (operator) {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
-        case '/': return a / b;
-        case "'": return `(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`; // Return the derivative expression for chain rule problems
+// A simple example of a problem set
+const problemSet = {
+  easy: [
+    { 
+      question: '\\frac{d}{dx}(x^2 + 2x)',
+      correctAnswer: '2x + 2',
+      solution: 'Using the power rule, the derivative of x^2 is 2x. The derivative of 2x is 2. So, the final derivative is 2x + 2.'
     }
-}
-
-function generateOptions(answer) {
-    const options = new Set([answer]);
-    if (gameMode === "random") {
-        while (options.size < 4) {
-            options.add(Math.floor(Math.random() * 100));
-        }
-    } else {
-        const functions = [
-            { fn: 'x^2', derivative: '2x' },
-            { fn: 'sin(x)', derivative: 'cos(x)' },
-            { fn: 'cos(x)', derivative: '-sin(x)' },
-            { fn: 'e^x', derivative: 'e^x' },
-            { fn: 'ln(x)', derivative: '1/x' },
-        ];
-        while (options.size < 4) {
-            const a = functions[Math.floor(Math.random() * functions.length)];
-            const b = functions[Math.floor(Math.random() * functions.length)];
-            options.add(`(${a.derivative})(${b.fn}) + (${a.fn})(${b.derivative})`);
-        }
+  ],
+  medium: [
+    {
+      question: '\\frac{d}{dx}(3x^2(2x+1)^3)',
+      correctAnswer: '6x(2x+1)^2(7x+3)',
+      solution: 'Using the chain rule, the derivative is 6x(2x+1)^2(7x+3).'
     }
-    return Array.from(options);
+  ],
+  hard: [
+    {
+      question: '\\frac{d}{dx}(\\frac{3x^2+2x}{x^3+2})',
+      correctAnswer: '\\frac{-3x^4-12x^3+8x+6}{(x^3+2)^2}',
+      solution: 'Using the quotient rule, the derivative is \\frac{-3x^4-12x^3+8x+6}{(x^3+2)^2}.'
+    }
+  ],
+};
+
+function generateProblem(difficulty) {
+  const problems = problemSet[difficulty];
+  return problems[Math.floor(Math.random() * problems.length)];
 }
 
 function displayProblem(problem) {
-    const problemElement = document.getElementById("problem");
-        if (problem.operator === "'") {
-        problemElement.innerHTML = `y = \\(${problem.a.fn}\\)\\(${problem.b.fn}\\)`;
-    } else {
-        problemElement.innerHTML = `\\(${problem.a} ${problem.operator} ${problem.b}\\)`;
-    }
-    MathJax.typeset(); // Update the LaTeX rendering
+  questionEl.innerHTML = '\\(' + problem.question + '\\)';
+  MathJax.typeset();
 }
 
-function displayOptions(options) {
-    options.forEach((option, index) => {
-        const optionElement = document.getElementById(`option${index + 1}`);
-        if (gameMode === "chainRule") {
-            optionElement.innerHTML = `\\(${option}\\)`;
-        } else {
-            optionElement.textContent = option;
-        }
-        optionElement.onclick = () => checkAnswer(option);
-    });
-    MathJax.typeset(); // Update the LaTeX rendering
+function generateAnswers(problem) {
+  const correctAnswerIndex = Math.floor(Math.random() * 4);
+  for (let i = 0; i < 4; i++) {
+    const button = document.createElement('button');
+    button.textContent = i === correctAnswerIndex ? problem.correctAnswer : `Wrong Answer ${i + 1}`;
+    button.onclick = function () {
+      if (i === correctAnswerIndex) {
+        currentScore++;
+        scoreEl.textContent = 'Score: ' + currentScore;
+        displaySolution(problem.solution);
+      }
+    };
+    answerContainer.appendChild(button);
+  }
 }
 
-function checkAnswer(selectedOption) {
-    if (selectedOption === currentAnswer) {
-        if (gameMode === "chainRule") {
-            correctAnswerElem.innerHTML = `Correct answer: \\(${currentAnswer}\\)<br>Step-by-step solution (simplified):<br>dy/dx = \\(${currentAnswer}\\)`;
-        } else {
-            correctAnswerElem.textContent = `Correct answer: ${currentAnswer}`;
-        }
-        solutionDiv.style.display = "block";
-        MathJax.typeset(); // Update the LaTeX rendering
-    }
+function displaySolution(solution) {
+  solutionEl.style.display = 'block';
+  solutionEl.querySelector('.latex-solution').innerHTML = '\\(' + solution + '\\)';
+  MathJax.typeset();
 }
 
-let gameMode;
-let currentProblem;
-let currentAnswer;
+function initGame() {
+  const difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
+  currentProblem = generateProblem(difficulty);
+  displayProblem(currentProblem);
+  generateAnswers(currentProblem);
+}
+
+initGame();
