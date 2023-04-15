@@ -95,4 +95,31 @@ wrongAnswers.splice(wrongIndex, 1);
   answerContainer.appendChild(button);
   MathJax.typeset();
 }
+}
 
+function displaySolution(solution) {
+solutionEl.style.display = "block";
+solutionEl.querySelector(".latex-solution").innerHTML = solution.map(step => '\(' + step.latex + '\) ' + step.text).join("<br>");
+const nextButton = document.createElement("button");
+nextButton.textContent = "Next Problem";
+nextButton.onclick = function () {
+solutionEl.style.display = "none";
+solutionEl.querySelector(".latex-solution").innerHTML = "";
+solutionEl.removeChild(nextButton);
+answerContainer.innerHTML = "";
+answerContainer.style.display = "flex";
+initGame();
+};
+solutionEl.appendChild(nextButton);
+MathJax.typeset();
+}
+
+function initGame() {
+const difficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
+currentProblem = generateProblem(selectedRule, selectedDifficulty);
+displayProblem(currentProblem);
+generateAnswers(currentProblem);
+}
+
+initGame();
+});
