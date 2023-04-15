@@ -5,30 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Game</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
-    <div class="game-container">
-        <h1>Math Game</h1>
-        <div id="game-menu">
-            <button id="start-random" class="menu-btn">Random Equations</button>
-            <button id="start-chain-rule" class="menu-btn">Chain Rule Equations</button>
-        </div>
-        <div id="game-board" style="display: none;">
-            <p id="problem"></p>
-            <div class="options">
-                <button id="option1" class="option-btn"></button>
-                <button id="option2" class="option-btn"></button>
-                <button id="option3" class="option-btn"></button>
-                <button id="option4" class="option-btn"></button>
-            </div>
-            <div id="solution" style="display: none;">
-                <h2>Correct Answer:</h2>
-                <p id="correct-answer"></p>
-                <button id="next-btn">Next</button>
-            </div>
-        </div>
+    <h1>Math Game</h1>
+    <div class="question-container">
+        <div class="latex-question" id="question"></div>
+        <div class="score" id="score">Score: 0</div>
+    </div>
+    <div class="answer-container">
+        <!-- Add answer buttons -->
+    </div>
+    <div class="solution-container" id="solution" style="display:none;">
+        <h2>Solution:</h2>
+        <div class="latex-solution"></div>
     </div>
     <script src="script.js"></script>
 </body>
