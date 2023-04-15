@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Game</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <h1>Math Game</h1>
-    <div class="question-container">
-        <div class="latex-question" id="question"></div>
-        <div class="score" id="score">Score: 0</div>
+  <div id="main-menu">
+    <h1>Select a Rule</h1>
+    <div id="rule-container"></div>
+    <h1>Select a Difficulty</h1>
+    <div id="difficulty-container"></div>
+    <button id="start-button">Start Game</button>
+  </div>
+  <div id="game-container" style="display:none;">
+    <div id="question"></div>
+    <div id="score">Score: 0</div>
+    <div id="answer-container"></div>
+    <div id="solution" style="display:none;">
+      <h2>Solution:</h2>
+      <div class="latex-solution"></div>
     </div>
-    <div class="answer-container" id="answer-container">
-        <!-- Answer buttons will be added here -->
-    </div>
-    <div class="solution-container" id="solution" style="display:none;">
-        <h2>Solution:</h2>
-        <div class="latex-solution"></div>
-    </div>
-    <script src="script.js"></script>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
