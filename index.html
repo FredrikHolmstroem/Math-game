@@ -1,34 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Game</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Potensspel</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class="main-menu">
-        <h1>Select a Rule</h1>
-        <button class="rule-btn">Product Rule</button>
-        <button class="rule-btn">Chain Rule</button>
-        <button class="rule-btn">Quotient Rule</button>
-        <h1>Select Difficulty</h1>
-        <button class="difficulty-btn">1</button>
-        <button class="difficulty-btn">2</button>
-        <button class="difficulty-btn">3</button>
-        <button id="start-game">Start Game</button>
+    <h1>Välkommen till Potensspelet!</h1>
+    <div id="difficulty">
+        <button onclick="startGame(1)">Lätt</button>
+        <button onclick="startGame(2)">Medel</button>
+        <button onclick="startGame(3)">Svårt</button>
     </div>
-    <div class="game">
-        <h1 class="score">Score: 0</h1>
-        <div class="problem"></div>
-        <div class="answers"></div>
-        <div class="solution">
-            <p class="latex-solution"></p>
-        </div>
+    <div id="game">
+        <h2 id="problem"></h2>
+        <input type="text" id="answer" placeholder="Skriv ditt svar här">
+        <button onclick="checkAnswer()">Svara</button>
+        <h2 id="feedback"></h2>
     </div>
     <script src="script.js"></script>
-    <script type="text/javascript" id="MathJax-script" async
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
 </body>
 </html>
