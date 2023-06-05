@@ -1,9 +1,21 @@
 #game {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+ Beklagar avbrottet, här är den fullständiga CSS-koden:
+
+style.css:
+```css
+#game {
+  text-align: center;
 }
 
 button {
-  margin: 10px;
+  margin: 5px;
+}
+
+#question, #instruction {
+  margin-top: 20px;
+}
+
+input {
+  margin-top: 20px;
+  width: 200px;
 }
