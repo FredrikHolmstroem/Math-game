@@ -6,8 +6,8 @@ function TreeNode(left, right, operator) {
   this.right = right;
   this.operator = operator;
 
-  this.toString = function() {
-    return '(' + left + ' ' + operator + ' ' + right + ')';
+  this.toLatex = function() {
+    return `(${left} ${operator} ${right})`;
   }
 }
 
@@ -34,17 +34,23 @@ function buildTree(numNodes) {
 
 document.getElementById('easy').addEventListener('click', function() {
   const expression = buildTree(2);
-  document.getElementById('question').innerText = expression.toString();
+  document.getElementById('instruction').innerText = 'Förenkla följande uttryck:';
+  document.getElementById('question').innerText = `$$${expression.toLatex()}$$`;
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 });
 
 document.getElementById('medium').addEventListener('click', function() {
   const expression = buildTree(3);
-  document.getElementById('question').innerText = expression.toString();
+  document.getElementById('instruction').innerText = 'Förenkla följande uttryck:';
+  document.getElementById('question').innerText = `$$${expression.toLatex()}$$`;
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 });
 
 document.getElementById('hard').addEventListener('click', function() {
   const expression = buildTree(4);
-  document.getElementById('question').innerText = expression.toString();
+  document.getElementById('instruction').innerText = 'Förenkla följande uttryck:';
+  document.getElementById('question').innerText = `$$${expression.toLatex()}$$`;
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 });
 
 document.getElementById('submit').addEventListener('click', function() {
