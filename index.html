@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Potensspel</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Power Law Game</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <h1>Välkommen till Potensspelet!</h1>
-    <div id="difficulty">
-        <button onclick="startGame(1)">Lätt</button>
-        <button onclick="startGame(2)">Medel</button>
-        <button onclick="startGame(3)">Svårt</button>
-    </div>
-    <div id="game">
-        <h2 id="problem"></h2>
-        <input type="text" id="answer" placeholder="Skriv ditt svar här">
-        <button onclick="checkAnswer()">Svara</button>
-        <h2 id="feedback"></h2>
-    </div>
-    <script src="script.js"></script>
+  <div id="game">
+    <button id="easy">Lätt</button>
+    <button id="medium">Medel</button>
+    <button id="hard">Svår</button>
+    <div id="question"></div>
+    <input id="answer" type="text" placeholder="Skriv ditt svar här..." />
+    <button id="submit">Skicka in</button>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
